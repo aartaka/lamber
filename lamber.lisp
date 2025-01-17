@@ -15,7 +15,6 @@
   (:method ((in stream))
     (%read (uiop:slurp-stream-forms in)))
   (:method ((list list))
-    list
     (cond
       ((memqual-string (first list) '("let" "def" "local" "var"))
        (let ((name (second list))
