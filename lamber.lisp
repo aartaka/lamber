@@ -154,3 +154,22 @@
                 `(lambda (,arg)
                    ,(lambda-ify body))))
       (t (mapcar #'lambda-ify thing)))))
+
+(defun %eval-process (term)
+  (cond
+    ((and (consp term)
+          (eq 'lambda (first term)))
+     `(lambda ,(second term)
+        ,(%eval-process (third term))))
+    ((consp term)
+     (if (> (length term) 2)
+         (%eval-process
+          `((,(first term)
+             ,(second term))
+            ,@(rest (rest term))))
+         `(funcall ,(%eval-process (first term))
+                   ,(%eval-process (second term)))))
+    (t term)))
+
+(defun eval (term)
+  (eval (%eval-process term)))
