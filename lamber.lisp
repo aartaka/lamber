@@ -48,9 +48,10 @@
        (let ((args (second list)))
          (multiple-value-bind (body next)
              (%read (nthcdr 2 list))
-           (values `(lambda (,@(uiop:ensure-list args))
-                      ,body)
-                   next))))
+           (loop with acc = body
+                 for arg in (reverse (uiop:ensure-list args))
+                 do (setf acc `(lambda (,arg) ,acc))
+                 finally (return (values acc next))))))
       ((consp (first list))
        (values (%read (first list)) (rest list)))
       (t
