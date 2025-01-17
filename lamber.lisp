@@ -83,7 +83,7 @@
                (when cons
                  (if (eq '|\|| (car cons))
                      (second cons)
-                     `(|cons| ,(car cons) ,(format-cons (cdr cons)))))))
+                     `(|cons| ,(car cons) ,(or (format-cons (cdr cons)) '|nil|))))))
       (format-cons list))))
 
 (defun read-colon (stream char)
