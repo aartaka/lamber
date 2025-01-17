@@ -85,15 +85,6 @@
                      `(|cons| ,(car cons) ,(format-cons (cdr cons)))))))
       (format-cons list))))
 
-(defun read-curly-brace (stream char)
-  (declare (ignorable char))
-  (let ((list (read-delimited-list #\} stream t)))
-    (loop with acc = (first list)
-          for (op arg . rest) on (rest list) by #'cddr
-          while (or op arg)
-          do (setf acc (list op acc arg))
-          finally (return acc))))
-
 (defun read-colon (stream char)
   (declare (ignorable char))
   (with-input-from-string (s (read-line stream))
@@ -108,11 +99,9 @@
     (setf (readtable-case *readtable*) :preserve)
     (set-macro-character #\' #'read-quoted-char)
     (set-macro-character #\[ #'read-square-bracket nil)
-    (set-macro-character #\{ #'read-curly-brace nil)
     (set-macro-character #\: #'read-colon)
     (set-macro-character #\, #'read-comma)
     (set-macro-character #\] nil)
-    (set-macro-character #\} nil)
     (set-macro-character #\| nil)
     (set-macro-character #\. nil)
     (%read in)))
