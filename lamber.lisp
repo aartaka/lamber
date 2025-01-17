@@ -29,7 +29,7 @@
              (values `(let ((,name ,value))
                         ,body)
                      remaining)))))
-      ((ignore-errors (string-equal (first list) "if"))
+      ((memqual-string (first list) '("if" "when"))
        (multiple-value-bind (condition rest)
            (%read (rest list))
          (multiple-value-bind (then rest)
