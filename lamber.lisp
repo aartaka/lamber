@@ -52,7 +52,7 @@
                       ,body)
                    next))))
       ((consp (first list))
-       (values (first list) (rest list)))
+       (values (%read (first list)) (rest list)))
       (t
        (loop for elem in list
              until (ignore-errors (memqual-string elem '("let" "def" "local" "var" "if" "then" "else" "." "end")))
