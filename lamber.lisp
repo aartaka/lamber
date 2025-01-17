@@ -107,15 +107,50 @@
     (set-macro-character #\. nil)
     (%read in)))
 
-;; (read "local a = 3
-;; local b = 'a'
-;; local x = function : a
-;;  local hello : 3
-;;  if 3 then
-;;   whateeeeeeever
-;;  else
-;;   if 3 then
-;;     whatever again
-;;   else
-;;    try other thing .
-;; x [a b c | d]")
+(defun tree-find (thing tree)
+  (typecase tree
+    ;; FIXME: Doesn't handle dotted lists.
+    (list (some (lambda (e) (tree-find thing e)) tree))
+    (t (equal thing tree))))
+
+(defgeneric lambda-ify (thing)
+  (:method ((thing symbol))
+    thing)
+  (:method ((thing string))
+    (loop with acc = '|nil|
+          for char across (reverse thing)
+          do (setf acc `(|cons| ,(lambda-ify char) ,acc))
+          finally (return acc)))
+  (:method ((thing character))
+    (lambda-ify (char-code thing)))
+  (:method ((thing integer))
+    (loop with zero = (gensym "zero")
+          with f = (gensym "f")
+          with acc = zero
+          repeat thing
+          do (setf acc (list f acc))
+          finally (return `(lambda (,f) (lambda (,zero) ,acc)))))
+  (:method ((thing cons))
+    (case (first thing)
+      (let (destructuring-bind (let ((name value)) body)
+               thing
+             (declare (ignorable let))
+             `((lambda (,name)
+                 ,(lambda-ify body))
+               ,(if (tree-find name value)
+                    (let ((recur (gensym "recur")))
+                      `(Y (lambda (,recur)
+                            ,(lambda-ify (subst recur name value)))))
+                    (lambda-ify value)))))
+      (if (destructuring-bind (if cond then else)
+              thing
+            (declare (ignorable if))
+            `((,(lambda-ify cond)
+               (lambda (,(gensym)) ,(lambda-ify then))
+               (lambda (,(gensym)) ,(lambda-ify else))))))
+      (lambda (destructuring-bind (lambda (arg) body)
+                  thing
+                (declare (ignorable lambda))
+                `(lambda (,arg)
+                   ,(lambda-ify body))))
+      (t (mapcar #'lambda-ify thing)))))
