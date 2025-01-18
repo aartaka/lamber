@@ -1,0 +1,38 @@
+def not fn p
+  p false true .
+
+def and fn (p q)
+  p q p .
+
+def or fn (p q)
+  p p q .
+
+def xor fn (p q)
+  p (not q) q .
+
+def nand fn (p q)
+  not : and p q .
+
+def nor fn (p q)
+  not : or p q .
+
+def xnor fn (p q)
+  not : xor p q .
+
+def mux fn (p q s)
+  or (and p (not s)) (and q s) .
+
+def impl fn (p q)
+  or (not p) q .
+
+def complement fn (p b)
+  not : p b .
+
+def conjoin fn (a b x)
+  and (a x) (b x) .
+
+def disjoin fn (a b x)
+  or (a x) (b x) .
+
+def always fn x true .
+def never  fn x false .
