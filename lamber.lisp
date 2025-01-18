@@ -115,6 +115,7 @@
     (set-macro-character #\, #'read-comma)
     (set-macro-character #\] nil)
     (set-macro-character #\| nil)
+    (set-macro-character #\. nil)
     (%read in)))
 
 (defun tree-find (thing tree)
