@@ -65,7 +65,12 @@
                             (suffix (if (memqual-string (first suffix) '("." "end" "then"))
                                         (rest suffix)
                                         suffix)))
-                       (return (values prefix suffix))))))))
+                       (return (values (if (consp prefix)
+                                           (mapcar (lambda (x)
+                                                     (if (consp x) (%read x) x))
+                                                   prefix)
+                                           prefix)
+                                       suffix))))))))
 
 (defun read-quoted-char (stream char)
   (declare (ignorable char))
