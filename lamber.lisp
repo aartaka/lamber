@@ -144,7 +144,7 @@
                  ,(lambda-ify body))
                ,(if (tree-find name value)
                     (let ((recur (gensym "recur")))
-                      `(Y (lambda (,recur)
+                      `(Z (lambda (,recur)
                             ,(lambda-ify (subst recur name value)))))
                     (lambda-ify value)))))
       (if (destructuring-bind (if cond then else)
