@@ -142,7 +142,7 @@
                thing
              (declare (ignorable let))
              (if (not (tree-find name body))
-                 body
+                 (lambda-ify body)
                  `((lambda (,name)
                      ,(lambda-ify body))
                    ,(if (tree-find name value)
