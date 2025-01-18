@@ -1,6 +1,3 @@
-def true = fn (thn els) thn .
-def false = fn (thn els) els .
-
 def succ fn (n f x)
   f : n f x .
 
