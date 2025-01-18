@@ -1,6 +1,8 @@
 (in-package :lamber)
 
-(defvar nil-var '(lambda (then) (lambda (else) else)))
+(defvar nil-var '(lambda (then)
+                  (declare (ignorable then))
+                  (lambda (else) else)))
 
 (defun memqual-string (item list)
   (member item list
@@ -52,7 +54,9 @@
              (%read (nthcdr 2 list))
            (loop with acc = body
                  for arg in (reverse (uiop:ensure-list args))
-                 do (setf acc `(lambda (,arg) ,acc))
+                 do (setf acc `(lambda (,arg)
+                                 (declare (ignorable ,arg))
+                                 ,acc))
                  finally (return (values acc next))))))
       ((consp (first list))
        (values (%read (first list)) (rest list)))
@@ -135,7 +139,9 @@
           with acc = zero
           repeat thing
           do (setf acc (list f acc))
-          finally (return `(lambda (,f) (lambda (,zero) ,acc)))))
+          finally (return `(lambda (,f)
+                             (declare (ignorable ,f))
+                             (lambda (,zero) ,acc)))))
   (:method ((thing cons))
     (case (first thing)
       (let (destructuring-bind (let ((name value)) body)
@@ -158,13 +164,19 @@
       (if (destructuring-bind (if cond then else)
               thing
             (declare (ignorable if))
-            `((,(lambda-ify cond)
-               (lambda (,(gensym)) ,(lambda-ify then))
-               (lambda (,(gensym)) ,(lambda-ify else))))))
+            (let ((dummy (gensym "dummy")))
+              `((,(lambda-ify cond)
+                 (lambda (,dummy)
+                   (declare (ignorable ,dummy))
+                   ,(lambda-ify then))
+                 (lambda (,dummy)
+                   (declare (ignorable ,dummy))
+                   ,(lambda-ify else)))))))
       (lambda (destructuring-bind (lambda (arg) body)
                   thing
                 (declare (ignorable lambda))
                 `(lambda (,arg)
+                   (declare (ignorable ,arg))
                    ,(lambda-ify body))))
       (t (mapcar #'lambda-ify thing)))))
 
