@@ -1,6 +1,8 @@
 (in-package :lamber)
 
 (defvar nil-var '(lambda (then) (lambda (else) else)))
+(defvar false-var nil-var)
+(defvar true-var '(lambda (then) (lambda (else) then)))
 
 (defun memqual-string (item list)
   (member item list
@@ -125,6 +127,12 @@
     (t (equal thing tree))))
 
 (defgeneric lambda-ify (thing)
+  (:method ((thing (eql '|true|)))
+    true-var)
+  (:method ((thing (eql '|false|)))
+    false-var)
+  (:method ((thing (eql '|nil|)))
+    nil-var)
   (:method ((thing symbol))
     thing)
   (:method ((thing string))
