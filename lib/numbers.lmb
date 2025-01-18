@@ -1,0 +1,80 @@
+def true = fn (thn els) thn .
+def false = fn (thn els) els .
+
+def succ fn (n f x)
+  f : n f x .
+
+def add fn (m n f x)
+  m f : n f x .
+
+def mult fn (m n f)
+  m : n f .
+
+def pow fn (b e)
+  e b .
+
+def pred fn (n f x)
+  n (fn (g h) h (g f))
+    (fn u x)
+    (fn u u)
+end
+
+def sub fn (m n)
+  n pred m .
+
+def iszero fn (n)
+  n (fn x false) true .
+
+def leq fn (m n)
+  iszero : sub m n .
+
+def eq fn (m n)
+  if (leq m n)
+  then (leq n m)
+  else false
+end
+
+def lt fn (m n)
+  leq (succ m) n .
+
+def gt fn : m n
+  (leq m n) false true .
+
+def geq fn (m n)
+  leq n m .
+
+def div fn (numer denom)
+  local loop = fn quot
+    when lt quot denom
+    then 0
+    else : succ : loop : sub quot denom
+  end
+  loop numer
+end
+
+def mod fn (numer denom)
+  sub numer : mult denom : div numer denom .
+
+def log fn (num base)
+  local loop = fn x
+    when (eq x base)
+    then 1
+    else : succ : loop : div x base
+  end
+  loop num
+end
+
+def min fn (m n)
+  (lt m n) m n .
+  
+def max fn (m n)
+  (lt m n) n m .
+
+def not fn b
+  b false true .
+
+def iseven fn n
+  n not true .
+
+def isodd fn n
+  n not false .
