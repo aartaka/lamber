@@ -58,13 +58,13 @@
        (values (%read (first list)) (rest list)))
       (t
        (loop for elem in list
-             until (ignore-errors (memqual-string elem '("let" "def" "local" "var" "if" "then" "else" "." "end")))
+             until (ignore-errors (memqual-string elem '("let" "def" "local" "var" "if" "then" "else" "end")))
              collect elem into prefix
              finally (let* ((suffix (nthcdr (length prefix) list))
                             (prefix (if (= 1 (length prefix))
                                         (first prefix)
                                         prefix))
-                            (suffix (if (memqual-string (first suffix) '("." "end" "then"))
+                            (suffix (if (memqual-string (first suffix) '("end" "then"))
                                         (rest suffix)
                                         suffix)))
                        (return (values (if (consp prefix)
@@ -111,7 +111,6 @@
     (set-macro-character #\, #'read-comma)
     (set-macro-character #\] nil)
     (set-macro-character #\| nil)
-    (set-macro-character #\. nil)
     (%read in)))
 
 (defun tree-find (thing tree)
