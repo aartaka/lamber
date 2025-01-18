@@ -1,5 +1,7 @@
 (in-package :lamber)
 
+(defvar nil-var '(lambda (then) (lambda (else) else)))
+
 (defun memqual-string (item list)
   (member item list
           :test (lambda (a b)
@@ -88,7 +90,7 @@
                (when cons
                  (if (eq '|\|| (car cons))
                      (second cons)
-                     `(|cons| ,(car cons) ,(or (format-cons (cdr cons)) '|nil|))))))
+                     `(lambda (z) (z ,(car cons) ,(or (format-cons (cdr cons)) nil-var)))))))
       (format-cons list))))
 
 (defun read-colon (stream char)
@@ -122,9 +124,9 @@
   (:method ((thing symbol))
     thing)
   (:method ((thing string))
-    (loop with acc = '|nil|
+    (loop with acc = nil-var
           for char across (reverse thing)
-          do (setf acc `(|cons| ,(lambda-ify char) ,acc))
+          do (setf acc `(lambda (z) (z ,(lambda-ify char) ,acc)))
           finally (return acc)))
   (:method ((thing character))
     (lambda-ify (char-code thing)))
@@ -144,8 +146,15 @@
                  ,(lambda-ify body))
                ,(if (tree-find name value)
                     (let ((recur (gensym "recur")))
-                      `(Z (lambda (,recur)
-                            ,(lambda-ify (subst recur name value)))))
+                      `((lambda (f)
+                          ((lambda (x)
+                             (f (lambda (y)
+                                  ((x x) y))))
+                           (lambda (x)
+                             (f (lambda (y)
+                                  ((x x) y))))))
+                        (lambda (,recur)
+                          ,(lambda-ify (subst recur name value)))))
                     (lambda-ify value)))))
       (if (destructuring-bind (if cond then else)
               thing
@@ -177,4 +186,4 @@
     (t term)))
 
 (defun eval (term)
-  (eval (%eval-process term)))
+  (cl:eval (%eval-process (lambda-ify term))))
