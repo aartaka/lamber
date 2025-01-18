@@ -94,8 +94,13 @@
 
 (defun read-colon (stream char)
   (declare (ignorable char))
-  (with-input-from-string (s (read-line stream))
-    (uiop:slurp-stream-forms s)))
+  (loop for form = (cl:read stream nil nil t)
+        for next-char = (loop for char = (peek-char nil stream)
+                              until (not (char= #\Space char))
+                              do (read-char stream)
+                              finally (return char))
+        collect form
+        until (memqual-string next-char '(#\Newline "." ")"))))
 
 (defun read-comma (stream char)
   (declare (ignorable stream char))
