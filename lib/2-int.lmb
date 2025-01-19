@@ -1,14 +1,29 @@
 def succ fn (n f x)
   f : n f x .
 
+alias 1+ succ .
+alias ++ succ .
+alias incf succ .
+alias inc succ .
+
 def add fn (m n f x)
   m f : n f x .
+
+alias + add .
+alias plus add .
 
 def mult fn (m n f)
   m : n f .
 
+alias * mult .
+alias × mult .
+
 def pow fn (b e)
   e b .
+
+alias ** pow .
+alias ^ pow .
+alias expt pow .
 
 def pred fn (n f x)
   n (fn (g h) h (g f))
@@ -16,14 +31,30 @@ def pred fn (n f x)
     (fn u u)
 end
 
+alias 1- pred .
+alias -- pred .
+alias decf pred .
+alias dec pred .
+
 def sub fn (m n)
   n pred m .
+
+alias - sub .
+alias minus sub .
 
 def iszero fn (n)
   n (fn x false) true .
 
+alias is0 iszero .
+alias zerop iszero .
+alias zero? iszero .
+alias =0 iszero .
+
 def leq fn (m n)
   iszero : sub m n .
+
+alias ≤ leq .
+alias <= leq .
 
 def eq fn (m n)
   if (leq m n)
@@ -31,14 +62,25 @@ def eq fn (m n)
   else false
 end
 
+alias = eq .
+alias int= eq .
+alias char= eq .
+
 def lt fn (m n)
   leq (succ m) n .
+
+alias < lt .
 
 def gt fn : m n
   (leq m n) false true .
 
+alias > gt .
+
 def geq fn (m n)
   leq n m .
+
+alias ≥ geq .
+alias >= geq .
 
 def div fn (numer denom)
   local loop = fn quot
@@ -49,8 +91,14 @@ def div fn (numer denom)
   loop numer
 end
 
+alias / div .
+alias quot div .
+
 def mod fn (numer denom)
   sub numer : mult denom : div numer denom .
+
+alias % mod .
+alias rem mod .
 
 def log fn (num base)
   local loop = fn x
@@ -73,5 +121,11 @@ def not fn b
 def iseven fn n
   n not true .
 
+alias evenp iseven .
+alias even? iseven .
+
 def isodd fn n
   n not false .
+
+alias oddp isodd .
+alias odd? isodd .
