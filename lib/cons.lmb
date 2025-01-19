@@ -1,0 +1,22 @@
+def cons fn (x y f)
+  f x y .
+
+def car fn (p)
+  p true .
+def cdr fn (p)
+  p false .
+
+def null fn p
+  p (fn (h t x) false) true .
+
+def nthcdr fn (n l)
+  n cdr l .
+
+def nth fn (n l)
+  car : nthcdr n l .
+
+def singleton fn e
+  cons e nil .
+
+def tuple fn (a b)
+  cons a : cons b nil .
