@@ -97,12 +97,13 @@
 (defun read-colon (stream char)
   (declare (ignorable char))
   (loop for form = (cl:read stream nil nil t)
-        for next-char = (loop for char = (peek-char nil stream)
-                              until (not (char= #\Space char))
-                              do (read-char stream)
-                              finally (return char))
+        for next-char = (loop for char = (peek-char nil stream nil nil)
+                              while (and (not (null char))
+                                         (char= #\Space char))
+                              do (read-char stream nil nil)
+                              finally (return (peek-char nil stream nil nil)))
         collect form
-        until (memqual-string next-char '(#\Newline "." ")"))))
+        until (memqual-string next-char '(#\Newline "." ")" "nil"))))
 
 (defun read-comma (stream char)
   (declare (ignorable stream char))
