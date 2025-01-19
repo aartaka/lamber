@@ -206,3 +206,18 @@
 
 (defun eval (term)
   (cl:eval (%eval-process (lambda-ify term))))
+
+(defun run-with-lib (in &optional lib)
+  (let* ((main (etypecase in
+                 ((or pathname
+                      (satisfies uiop:file-exists-p))
+                  (open in))
+                 (string (make-string-input-stream in))
+                 (stream in)))
+         (lib-files (if (uiop:directory-exists-p lib)
+                        (uiop:directory-files lib)
+                        (uiop:ensure-list lib)))
+         (lib-files (sort lib-files #'string-lessp
+                          :key #'pathname-name)))
+    (eval (read (apply #'make-concatenated-stream
+                       (append (mapcar #'open lib-files) (list main)))))))
