@@ -1,0 +1,24 @@
+def deduplicate fn (p l)
+  local filtering = fn (e a)
+    if (some (fn (x) (p x e)) a)
+    then a
+    else cons e a
+  end
+  foldr filtering nil l
+end
+
+alias nub deduplicate .
+alias set deduplicate .
+alias dedup deduplicate .
+alias dedupe deduplicate .
+
+def difference fn (p a b)
+  deduplicate : remove (fn (e) some (fn (x) p x e) b) a .
+
+def intersection fn (p a b)
+  deduplicate : filter (fn (e) some (fn (x) p x e) b) a .
+
+alias intersect intersection .
+
+def union fn (p a b)
+  deduplicate p : concat a b .
