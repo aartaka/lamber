@@ -1,0 +1,6 @@
+def foldr = fn (f i l)
+  local loop = fn (h t z)
+    f h : t loop z
+  end
+  l loop i
+end
