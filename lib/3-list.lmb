@@ -47,7 +47,7 @@ def some fn (f l)
   foldr or false : map f l .
 
 def all fn (f l)
-  fldr and true : map f l .
+  foldr and true : map f l .
 
 def none fn (f l)
   not : some f l .
