@@ -1,6 +1,110 @@
-def foldr = fn (f i l)
+def foldr fn (f i l)
   local loop = fn (h t z)
     f h : t loop z
   end
   l loop i
 end
+
+def map fn (f l)
+  local loop = fn (h t i)
+    cons (f h) (t loop i)
+  end
+  l loop nil
+end
+
+def concat fn (a b)
+  foldr cons b a .
+
+def rcons fn (a b)
+  concat a : cons b nil .
+
+def concatmap fn (f l)
+  foldr concat nil : map f l .
+
+def length fn l
+  foldr (fn (e a) succ a) 0 l .
+
+def filter fn (f l)
+  local process = fn (e a)
+    if (f e)
+    then (cons e a)
+    else a
+  end
+  foldr process nil l
+end
+
+def remove fn (f l)
+  filter (complement f) l .
+
+def reverse fn l
+  local loop = fn (h t i)
+    t loop : cons h i
+  end
+  l loop nil
+end
+
+def some fn (f l)
+  foldr or false : map f l .
+
+def all fn (f l)
+  fldr and true : map f l .
+
+def none fn (f l)
+  not : some f l .
+
+def notevery fn (f l)
+  not : all f l .
+
+def find fn (p l)
+  local inner = fn (e a)
+    if (p e)
+    then e
+    else a
+  end
+  foldr inner nil l
+end
+
+def unfoldr fn (f i t)
+  local loop = fn (x)
+    if (t x)
+    then nil
+    else cons x : loop : f x
+  end
+  loop i
+end
+
+def iota fn n
+  unfoldr succ 0 : eq n .
+
+def mapiota fn (f n)
+  map f : iota n .
+
+def replicate fn (n e)
+  mapiota (fn x e) n .
+
+def range fn (s e)
+  mapiota (add s) (sub e s) .
+
+def last fn (l)
+  local loop = fn l
+    if (null (cdr l)
+    then car l
+    else loop : cdr l
+  end
+  loop l
+end
+
+def butlast fn (l)
+  local loop = fn l
+    if (null (cdr l))
+    then nil
+    else cons (car l) : loop : cdr l
+  end
+  loop l
+end
+
+def rotatel fn (l)
+    rcons (cdr l) (car l) .
+
+def rotater fn (l)
+    cons (last l) (butlast l) .
