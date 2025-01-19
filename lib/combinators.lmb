@@ -1,0 +1,58 @@
+def I fn a a .
+
+def S fn (a b c)
+  a c : b c .
+
+def K fn (a b)
+  a .
+
+def compose fn (a b c)
+  a : b c .
+
+def C fn (a b c)
+  a c b .
+
+def D fn (a b c d)
+  a b : c d .
+
+def F fn (a b c)
+  c b a .
+
+def H fn (a b c)
+  a b c b .
+
+def J fn (a b c d)
+  a b : a d c .
+
+def L fn (a b)
+  a : b b .
+
+def N fn (a b c d)
+  a (b d) (c d) .
+
+def O fn (a b)
+  b : a b .
+
+def T fn (a b)
+  b a .
+
+def W fn (a)
+  a b b .
+
+def ω fn a
+  a a .
+
+;; TODO Ω
+
+def Y fn g
+  let inner = fn (x) g x x .
+  inner inner .
+
+def Z fn f
+  let inner = fn (x) f (fn y : x x y) .
+  inner inner .
+
+;; TODO Θ
+
+def ι fn f
+  f S K .
