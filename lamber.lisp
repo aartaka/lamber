@@ -220,4 +220,8 @@
          (lib-files (sort lib-files #'string-lessp
                           :key #'pathname-name)))
     (eval (read (apply #'make-concatenated-stream
-                       (append (mapcar #'open lib-files) (list main)))))))
+                       (reduce (lambda (a e)
+                                 (append a (list (make-string-input-stream (string #\Newline)) e)))
+                               (append (mapcar #'open lib-files)
+                                       (list main))
+                               :initial-value '()))))))
