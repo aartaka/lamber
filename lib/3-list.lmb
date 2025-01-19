@@ -108,3 +108,72 @@ def rotatel fn (l)
 
 def rotater fn (l)
     cons (last l) (butlast l) .
+
+def take fn (n l)
+  local loop = fn l
+    if (eq n (length l))
+    then l
+    else loop : butlast l
+  end
+  loop l
+end
+
+def drop nthcdr
+
+def takewhile fn (p l)
+  local loop = fn l
+    if (p (car l))
+    then cons (car l) : loop : cdr l
+    else nil
+  end
+  loop l
+end
+
+def dropwhile fn (p l)
+  local loop = fn l
+    if (p (car l))
+    then loop : cdr l
+    else l
+  end
+  loop l
+end
+
+def split fn (n l)
+  cons (take n l) (drop n l) .
+
+def unzip fn (l)
+  cons (map car l) (map cdr l) .
+
+def zip fn (a b)
+  local loop = fn (h t b)
+    cons (cons h : car b)
+         (t loop : cdr b)
+  end
+  a loop b
+end
+
+def ipairs fn (l)
+  zip (iota : length l) l .
+
+def juxt fn (f g x)
+  cons (f x) (g x) .
+
+def equal fn (p a b)
+  local destructcmp = fn e
+    e (fn (h t i) p h t)
+      false
+  end
+  all destructcmp : zip a b
+end
+
+def sort fn (p l)
+  local merge = fn (l p x)
+    l
+    (Z (fn (r h t x)
+           if (p h : car x)
+           then (cons h (t r x))
+           else (cons (car x) (cons h t))))
+    (cons x nil)
+  end
+  foldr (fn (e a) merge a p e) nil l
+end
