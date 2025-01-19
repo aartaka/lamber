@@ -109,6 +109,10 @@
   (declare (ignorable stream char))
   (values))
 
+(defun read-end-period (stream char)
+  (declare (ignorable stream char))
+  '|end|)
+
 (defun read (in)
   (let ((*readtable* (copy-readtable *readtable*)))
     (setf (readtable-case *readtable*) :preserve)
@@ -116,9 +120,9 @@
     (set-macro-character #\[ #'read-square-bracket nil)
     (set-macro-character #\: #'read-colon)
     (set-macro-character #\, #'read-comma)
+    (set-macro-character #\. #'read-end-period)
     (set-macro-character #\] nil)
     (set-macro-character #\| nil)
-    (set-macro-character #\. nil)
     (%read in)))
 
 (defun tree-find (thing tree)
