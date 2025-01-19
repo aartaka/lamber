@@ -1,8 +1,8 @@
 (in-package :lamber)
 
-(defvar nil-var '(lambda (then) (lambda (else) else)))
+(defvar nil-var '(lambda (thn) (lambda (els) els)))
 (defvar false-var nil-var)
-(defvar true-var '(lambda (then) (lambda (else) then)))
+(defvar true-var '(lambda (thn) (lambda (els) thn)))
 
 (defun memqual-string (item list)
   (member item list
@@ -89,7 +89,9 @@
                (when cons
                  (if (eq '|\|| (car cons))
                      (second cons)
-                     `(lambda (z) (z ,(car cons) ,(or (format-cons (cdr cons)) nil-var)))))))
+                     `(lambda (z)
+                        (z ,(car cons)
+                           ,(or (format-cons (cdr cons)) nil-var)))))))
       (format-cons list))))
 
 (defun read-colon (stream char)
