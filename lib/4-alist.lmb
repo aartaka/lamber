@@ -1,0 +1,24 @@
+def acons fn (k v a)
+ cons (cons k v) a .
+
+def assoc fn (p a)
+  find (fn e p : car e) a .
+
+def rassoc fn (p a)
+  find (fn e p : cdr e) a .
+
+def lookup fn (p a)
+  cdr : assoc p a .
+
+def keys fn (a)
+  local loop = fn (h t i)
+    cons (car h) (t loop i) .
+  a loop nil
+end
+
+def vals fn (a)
+  local loop = fn (h t i)
+    cons (cdr h) (t loop i)
+  end
+  a loop nil
+end
