@@ -1,21 +1,21 @@
-def cons fn (x y f)
+def cons fn (head tail f)
   f x y .
 
 alias pair cons .
 
-def car fn (p)
-  p true .
+def car fn (pair)
+  pair true .
 
 alias head car .
 
-def cdr fn (p)
-  p false .
+def cdr fn (pair)
+  pair false .
 
 alias tail cdr .
 alias rest cdr .
 
-def null fn p
-  p (fn (h t x) false) true .
+def null fn (pair)
+  pair (fn (h t x) false) true .
 
 alias empty null .
 alias emptyp null .
@@ -23,14 +23,14 @@ alias empty? null .
 alias null? null .
 alias nil? null .
 
-def nthcdr fn (n l)
-  n cdr l .
+def nthcdr fn (n list)
+  n cdr list .
 
-def nth fn (n l)
-  car : nthcdr n l .
+def nth fn (n list)
+  car : nthcdr n list .
 
-def singleton fn e
-  cons e nil .
+def singleton fn (elem)
+  cons elem nil .
 
 def tuple fn (a b)
   cons a : cons b nil .
