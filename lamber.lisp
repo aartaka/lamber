@@ -214,9 +214,14 @@
                   (open in))
                  (string (make-string-input-stream in))
                  (stream in)))
-         (lib-files (if (uiop:directory-exists-p lib)
-                        (uiop:directory-files lib)
-                        (uiop:ensure-list lib)))
+         (lib-files (reduce
+                     #'append
+                     (mapcar
+                      (lambda (l)
+                        (if (uiop:directory-exists-p l)
+                            (uiop:directory-files l)
+                            (uiop:ensure-list l)))
+                      (uiop:ensure-list lib))))
          (lib-files (sort lib-files #'string-lessp
                           :key #'pathname-name)))
     (eval (read (apply #'make-concatenated-stream
