@@ -63,6 +63,8 @@ def eq fn (m n)
 end
 
 alias = eq .
+alias == eq .
+alias === eq .
 alias int= eq .
 alias char= eq .
 
