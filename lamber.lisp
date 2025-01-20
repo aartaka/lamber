@@ -73,6 +73,7 @@
                                         prefix)))
                        (labels ((process-infix (list)
                                   (if (and (> (length list) 2)
+                                           (and (symbolp (second list)))
                                            (uiop:string-enclosed-p "`" (second list) "`"))
                                       (destructuring-bind (first op second &rest rest)
                                           list
@@ -82,7 +83,10 @@
                                               prefixed
                                               (process-infix (cons prefixed rest)))))
                                       list)))
-                         (return (values (process-infix prefix) suffix)))))))))
+                         (return (values (if (consp prefix)
+                                             (process-infix prefix)
+                                             prefix)
+                                         suffix)))))))))
 
 (defun read-quoted-char (stream char)
   (declare (ignorable char))
