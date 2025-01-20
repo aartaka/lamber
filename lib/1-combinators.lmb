@@ -1,5 +1,9 @@
 def I fn a a .
 
+alias return I .
+alias identity I .
+alias id I .
+
 def S fn (a b c)
   a c : b c .
 
@@ -9,8 +13,15 @@ def K fn (a b)
 def compose fn (a b c)
   a : b c .
 
+alias B compose .
+alias uni compose .
+alias ∘ compose .
+alias o compose .
+
 def C fn (a b c)
   a c b .
+
+alias swap C .
 
 def D fn (a b c d)
   a b : c d .
@@ -30,6 +41,8 @@ def L fn (a b)
 def N fn (a b c d)
   a (b d) (c d) .
 
+alias bi N .
+
 def O fn (a b)
   b : a b .
 
@@ -38,6 +51,8 @@ def T fn (a b)
 
 def W fn (a)
   a b b .
+
+alias dup W .
 
 def ω fn a
   a a .
