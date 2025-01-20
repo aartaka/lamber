@@ -71,7 +71,18 @@
                             (prefix (if (= 1 (length prefix))
                                         (first prefix)
                                         prefix)))
-                       (return (values prefix suffix))))))))
+                       (labels ((process-infix (list)
+                                  (if (and (> (length list) 2)
+                                           (uiop:string-enclosed-p "`" (second list) "`"))
+                                      (destructuring-bind (first op second &rest rest)
+                                          list
+                                        (let ((prefixed (list (intern (subseq (string op) 1 (1- (length (string op)))))
+                                                                 first second)))
+                                          (if (= 3 (length list))
+                                              prefixed
+                                              (process-infix (cons prefixed rest)))))
+                                      list)))
+                         (return (values (process-infix prefix) suffix)))))))))
 
 (defun read-quoted-char (stream char)
   (declare (ignorable char))
@@ -121,6 +132,7 @@
     (set-macro-character #\: #'read-colon)
     (set-macro-character #\, #'read-comma)
     (set-macro-character #\. #'read-end-period)
+    (set-macro-character #\` nil t)
     (set-macro-character #\] nil)
     (set-macro-character #\| nil)
     (%read in)))
