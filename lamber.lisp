@@ -167,7 +167,7 @@
                      ,(lambda-ify body))
                    ,(if (tree-find name value)
                         ;; Automatic recursive functions with Z-combinator
-                        (let ((recur (gensym "recur")))
+                        (let ((recur (gensym (uiop:strcat (string name) "-recur"))))
                           ;; Z-combinator (what an unfortunate name...)
                           `((lambda (f)
                               ((lambda (x)
