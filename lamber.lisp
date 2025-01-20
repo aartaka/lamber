@@ -171,12 +171,16 @@
       (let (destructuring-bind (let ((name value)) body)
                thing
              (declare (ignorable let))
+             ;; XXX: Tree-shaking. More (2? 3?) passes won't hurt, but
+             ;; let's have this for now.
              (if (not (tree-find name body))
                  (lambda-ify body)
                  `((lambda (,name)
                      ,(lambda-ify body))
                    ,(if (tree-find name value)
+                        ;; Automatic recursive functions with Z-combinator
                         (let ((recur (gensym "recur")))
+                          ;; Z-combinator (what an unfortunate name...)
                           `((lambda (f)
                               ((lambda (x)
                                  (f (lambda (y)
