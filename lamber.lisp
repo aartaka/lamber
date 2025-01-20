@@ -182,10 +182,8 @@
                                (lambda (x)
                                  (f (lambda (y)
                                       ((x x) y))))))
-                            (#+sbcl sb-int:named-lambda #+sbcl name
-                             #-sbcl lambda
-                             (,recur)
-                             ,(lambda-ify (subst recur name value)))))
+                            (lambda (,recur)
+                              ,(lambda-ify (subst recur name value)))))
                         (lambda-ify value))))))
       (if (destructuring-bind (if cond then else)
               thing
