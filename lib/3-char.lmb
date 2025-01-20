@@ -1,6 +1,10 @@
 def iscontrol fn (c)
   or (char= c 127) (< c ' ') .
 
+alias isControl iscontrol .
+alias controlp iscontrol .
+alias control? iscontrol .
+
 ;; Yes, it's imperfect.
 ;; Needs Unicode support and more elegant implementation.
 def isspace fn (c)
@@ -12,41 +16,78 @@ def isspace fn (c)
   loop [' ' '\n' '\t' '\r']
 end
 
+alias spacep isspace .
+alias space? isspace .
+alias whitespacep isspace .
+alias whitespace? isspace .
+alias isSpace isspace .
+
 ;; Only English/Latin ASCII letters
 def islower fn (c)
   or (between 97 c 122)
      (or (between 223 c 246)
          (between 248 c 255)) .
 
+alias isLower islower .
+alias lowercasep islower .
+alias lowercase? islower .
+
 def isupper fn (c)
   or (between 65 c 90)
      (or (between 192 c 214)
          (between 216 c 222)) .
 
+alias isUpper isupper .
+alias uppercasep isupper .
+alias uppercase? isupper .
+
 def isalpha fn (c)
   or : islower c
      : isupper c .
 
+alias alphap isalpha .
+alias isAlpha isalpha .
+
 def isdigit fn (c)
   between '0' c '9' .
 
+alias isDigit isdigit .
+alias digitp isdigit .
+alias digit? isdigit .
+
 def isoctdigit fn (c)
   between '0' c '7' .
+
+alias isOctDigit isoctdigit .
 
 def ishexdigit fn (c)
   or (isdigit c)
      (or (between 'A' c 'F')
          (between 'a' c 'f')) .
 
+alias isHexDigit ishexdigit .
+
 def isalnum fn (c)
   or : isalpha c
      : isdigit c .
 
+alias alphanumericp isalnum .
+alias alphanumeric? isalnum .
+alias isAlphaNum isalnum .
+
 def isascii fn (c)
   < c 128 .
 
+alias isAscii isascii .
+alias asciip isascii .
+alias ascii? isascii .
+
 def islatin1 fn (c)
   < c 256 .
+
+alias isLatin1 islatin1 .
+alias latin1p islatin1 .
+alias latin1? islatin1 .
 
 def isasciiupper fn (c)
   and : isupper c
