@@ -30,7 +30,7 @@ def xor fn (p q)
 
 alias ⊻ xor .
 alias ⊕ xor .
-aliias ⩛ xor .
+alias ⩛ xor .
 
 def nand fn (p q)
   not : and p q .
