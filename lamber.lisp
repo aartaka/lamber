@@ -79,7 +79,7 @@
         if (char= #\\ c)
           do (let ((next (read-char stream)))
                (setf
-                c (case (read-char stream)
+                c (case next
                     (#\a #\Bell)
                     (#\b #\Backspace)
                     (#\n #\Newline)
