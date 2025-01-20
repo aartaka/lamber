@@ -31,6 +31,3 @@ def nth fn (n list)
 
 def singleton fn (elem)
   cons elem nil .
-
-def tuple fn (a b)
-  cons a : cons b nil .
