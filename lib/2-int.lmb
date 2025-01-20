@@ -123,6 +123,12 @@ def min fn (m n)
 def max fn (m n)
   (lt m n) n m .
 
+def between fn (low x high)
+  and (geq c low) (leq c high) .
+
+def clamp fn (low x high)
+  max low : min x high .
+
 def iseven fn n
   n not true .
 
