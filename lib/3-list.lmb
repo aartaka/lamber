@@ -178,3 +178,9 @@ end
 def sort fn (cmp list)
   foldr (fn (e a) insert e cmp a) nil list
 end
+
+def apply fn (f list)
+  if (null list)
+  then f
+  else apply (f : car list) (cdr list)
+end
