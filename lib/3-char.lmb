@@ -1,0 +1,77 @@
+def iscontrol fn (c)
+  or (char= c 127) (< c ' ') .
+
+;; Yes, it's imperfect.
+;; Needs Unicode support and more elegant implementation.
+def isspace fn (c)
+  local loop = fn l
+    if (null l)
+    then false
+    else or (char= c (car l)) (loop (cdr l))
+  end
+  loop [' ' '\n' '\t' '\r']
+end
+
+;; Only English/Latin ASCII letters
+def islower fn (c)
+  or (between 97 c 122)
+     (or (between 223 c 246)
+         (between 248 c 255)) .
+
+def isupper fn (c)
+  or (between 65 c 90)
+     (or (between 192 c 214)
+         (between 216 c 222)) .
+
+def isalpha fn (c)
+  or : islower c
+     : isupper c .
+
+def isdigit fn (c)
+  between '0' c '9' .
+
+def isoctdigit fn (c)
+  between '0' c '7' .
+
+def ishexdigit fn (c)
+  or (isdigit c)
+     (or (between 'A' c 'F')
+         (between 'a' c 'f')) .
+
+def isalnum fn (c)
+  or : isalpha c
+     : isdigit c .
+
+def isascii fn (c)
+  < c 128 .
+
+def islatin1 fn (c)
+  < c 256 .
+
+def isasciiupper fn (c)
+  and : isupper c
+      : isascii c .
+
+def isasciilower fn (c)
+  and : islower c
+      : isascii c .
+
+def digittoint fn (c)
+  if (between '0' c '9')
+   then - c 48
+  else if (between 'A' c 'F')
+   then - c 55
+  else if (between 'a' c 'f')
+   then - c 87
+  else
+   0
+end
+
+def inttodigit fn (i)
+  if (between 0 i 9)
+   then + i 48
+  else if (between 10 i 15)
+   then + i 55
+  else
+   0
+end
