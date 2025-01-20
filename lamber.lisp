@@ -148,12 +148,10 @@
   (:method ((thing character))
     (lambda-ify (char-code thing)))
   (:method ((thing integer))
-    (loop with zero = (gensym "zero")
-          with f = (gensym "f")
-          with acc = zero
+    (loop with acc = 'zero
           repeat thing
-          do (setf acc (list f acc))
-          finally (return `(lambda (,f) (lambda (,zero) ,acc)))))
+          do (setf acc (list 'f acc))
+          finally (return `(lambda (f) (lambda (zero) ,acc)))))
   (:method ((thing cons))
     (case (first thing)
       (let (destructuring-bind (let ((name value)) body)
