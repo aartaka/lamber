@@ -67,7 +67,7 @@ def mux fn (p q selector)
   or (and p (not selector)) (and q selector) .
 
 def complement fn (pred bool)
-  not : p b .
+  not : pred bool .
 
 def conjoin fn (f g x)
   and (f x) (g x) .
