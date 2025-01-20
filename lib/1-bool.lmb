@@ -63,17 +63,17 @@ alias Ɔ impl .
 alias ⟹ impl .
 alias ⊃ impl .
 
-def mux fn (p q s)
-  or (and p (not s)) (and q s) .
+def mux fn (p q selector)
+  or (and p (not selector)) (and q selector) .
 
-def complement fn (p b)
+def complement fn (pred bool)
   not : p b .
 
-def conjoin fn (a b x)
-  and (a x) (b x) .
+def conjoin fn (f g x)
+  and (f x) (g x) .
 
-def disjoin fn (a b x)
-  or (a x) (b x) .
+def disjoin fn (f g x)
+  or (f x) (g x) .
 
 def always fn x true .
 def never  fn x false .
