@@ -1,13 +1,27 @@
 def cons fn (x y f)
   f x y .
 
+alias pair cons .
+
 def car fn (p)
   p true .
+
+alias head car .
+
 def cdr fn (p)
   p false .
 
+alias tail cdr .
+alias rest cdr .
+
 def null fn p
   p (fn (h t x) false) true .
+
+alias empty null .
+alias emptyp null .
+alias empty? null .
+alias null? null .
+alias nil? null .
 
 def nthcdr fn (n l)
   n cdr l .
