@@ -1,29 +1,65 @@
+alias True true .
+alias False false .
+
 def not fn p
   p false true .
+
+alias ¬ not .
+alias ⫟ not .
+alias ~ not .
 
 def and fn (p q)
   p q p .
 
+alias ∧ and .
+alias & and .
+
 def or fn (p q)
   p p q .
+
+alias | or .
+alias ∨ or .
 
 def xor fn (p q)
   p (not q) q .
 
+alias ⊻ xor .
+alias ⊕ xor .
+aliias ⩛ xor .
+
 def nand fn (p q)
   not : and p q .
+
+alias ⊼ nand .
+alias ↑ nand .
 
 def nor fn (p q)
   not : or p q .
 
+alias ⊽ nor .
+alias ↓ nor .
+
 def xnor fn (p q)
   not : xor p q .
 
-def mux fn (p q s)
-  or (and p (not s)) (and q s) .
+alias ⊙ xnor .
+alias <-> xnor .
+alias ↔ xnor .
+alias ⇔ xnor .
+alias ⬄ xnor .
+alias ⟺ xnor .
+alias bool= xnor .
 
 def impl fn (p q)
   or (not p) q .
+
+alias ⇒ impl .
+alias Ɔ impl .
+alias ⟹ impl .
+alias ⊃ impl .
+
+def mux fn (p q s)
+  or (and p (not s)) (and q s) .
 
 def complement fn (p b)
   not : p b .
