@@ -124,7 +124,7 @@ def max fn (m n)
   (lt m n) n m .
 
 def between fn (low x high)
-  and (geq c low) (leq c high) .
+  and (geq x low) (leq x high) .
 
 def clamp fn (low x high)
   max low : min x high .
