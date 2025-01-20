@@ -72,11 +72,17 @@ def lt fn (m n)
   leq (succ m) n .
 
 alias < lt .
+alias less lt .
+alias lessp lt .
+alias below lt .
 
 def gt fn : m n
   (leq m n) false true .
 
 alias > gt .
+alias greater gt .
+alias greaterp gt .
+alias above gt .
 
 def geq fn (m n)
   leq n m .
