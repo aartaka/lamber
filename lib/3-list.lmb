@@ -166,14 +166,15 @@ def equal fn (p a b)
   all destructcmp : zip a b
 end
 
-def sort fn (p l)
-  local merge = fn (l p x)
-    l
-    (Z (fn (r h t x)
-           if (p h : car x)
-           then (cons h (t r x))
-           else (cons (car x) (cons h t))))
-    (cons x nil)
-  end
-  foldr (fn (e a) merge a p e) nil l
+def insert fn (x cmp list)
+  list
+  (Z (fn (r h t x)
+       if (cmp h : car x)
+       then (cons h (t r x))
+       else (cons (car x) (cons h t))))
+  (cons x nil)
+end
+
+def sort fn (cmp list)
+  foldr (fn (e a) insert e cmp a) nil list
 end
