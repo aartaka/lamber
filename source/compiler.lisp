@@ -10,7 +10,11 @@
 
 (defmethod plug-dummy-for-lib ((tree cons))
   (if (eq 'let (first tree))
-      (plug-dummy-for-lib (third tree))
+      (destructuring-bind (let ((name value)) body)
+          tree
+        (declare (ignorable let))
+        `(,let ((,name ,value))
+           ,(plug-dummy-for-lib body)))
       tree))
 
 (define-generic tree-shake ((tree t))
