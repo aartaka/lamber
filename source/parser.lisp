@@ -59,10 +59,10 @@
        (let ((args (second list)))
          (multiple-value-bind (body next)
              (%read (nthcdr 2 list))
-           (loop with acc = body
-                 for arg in (reverse (uiop:ensure-list args))
-                 do (setf acc `(lambda (,arg) ,acc))
-                 finally (return (values acc next))))))
+           (values
+            `(lambda (,@(uiop:ensure-list args))
+               ,body)
+            next))))
       (t
        (loop for elem in list
              until (ignore-errors (memqual-string elem '("let" "def" "local" "var" "alias" "if" "then" "else" "end" ".")))
