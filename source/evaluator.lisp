@@ -61,24 +61,24 @@
                          body)))))
       (t (mapcar #'lambda-ify thing)))))
 
-(defun %eval-process (term)
+(defun %process-applications (term)
   (cond
     ((and (consp term)
           (eq 'lambda (first term)))
      `(lambda ,(second term)
-        ,(%eval-process (third term))))
+        ,(%process-applications (third term))))
     ((consp term)
      (if (> (length term) 2)
-         (%eval-process
+         (%process-applications
           `((,(first term)
              ,(second term))
             ,@(rest (rest term))))
-         `(funcall ,(%eval-process (first term))
-                   ,(%eval-process (second term)))))
+         `(funcall ,(%process-applications (first term))
+                   ,(%process-applications (second term)))))
     (t term)))
 
 (defun eval (term)
-  (cl:eval (%eval-process (lambda-ify (optimize term)))))
+  (cl:eval (%process-applications (lambda-ify (optimize term)))))
 
 (defun run-with-lib (in &optional lib)
   (let* ((main (etypecase in
