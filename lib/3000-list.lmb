@@ -144,7 +144,7 @@ def split fn (n l)
 def splitwhen fn (p l)
   local prefix = takewhile (complement p) l .
   local suffix = dropwhile (complement p) l .
-  cons prefix suffix .
+  cons prefix suffix
 end
 
 def unzip fn (l)
