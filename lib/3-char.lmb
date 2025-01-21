@@ -97,6 +97,22 @@ def isasciilower fn (c)
   and : islower c
       : isascii c .
 
+def tolower fn (c)
+   + c (if (between 'A' c 'Z')
+         then - 'a' 'A'
+        else if (between 'À' c 'Þ')
+         then - 'à' 'À'
+        else 0)
+end
+
+def toupper fn (c)
+   - c (if (between 'a' c 'z')
+         then - 'a' 'A'
+        else if (between 'à' c 'þ')
+         then - 'à' 'À'
+        else 0)
+end
+
 def digittoint fn (c)
   if (between '0' c '9')
    then - c 48
