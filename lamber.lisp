@@ -233,12 +233,12 @@
                      #'append
                      (mapcar
                       (lambda (l)
-                        (if (uiop:directory-exists-p l)
-                            (uiop:directory-files l)
-                            (uiop:ensure-list l)))
-                      (uiop:ensure-list lib))))
-         (lib-files (sort lib-files #'string-lessp
-                          :key #'pathname-name)))
+                        (sort (if (uiop:directory-exists-p l)
+                                  (uiop:directory-files l)
+                                  (uiop:ensure-list l))
+                              #'string-lessp
+                              :key #'pathname-name))
+                      (uiop:ensure-list lib)))))
     (eval (read (apply #'make-concatenated-stream
                        (reduce (lambda (a e)
                                  (append a (list (make-string-input-stream (string #\Newline)) e)))
