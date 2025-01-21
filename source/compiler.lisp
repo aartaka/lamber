@@ -3,6 +3,16 @@
 
 (in-package :lamber)
 
+(define-generic plug-dummy-for-lib ((tree null))
+  "Plug the dummy value (zero/false/nil) for when there's no code to run."
+  (warn "No code to evaluate, doing a dry checking run on a library")
+  0)
+
+(defmethod plug-dummy-for-lib ((tree cons))
+  (if (eq 'let (first tree))
+      (plug-dummy-for-lib (third tree))
+      tree))
+
 (define-generic tree-shake ((tree t))
   "Remove all the unused `let'-bound functions recursively."
   tree)
@@ -107,4 +117,6 @@
     (warn-on-unbound
      (tree-shake
       (tree-shake
-       (tree-shake tree)))))))
+       (tree-shake
+        (plug-dummy-for-lib
+         tree))))))))
