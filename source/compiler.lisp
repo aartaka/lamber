@@ -51,7 +51,7 @@
 
 (define-generic detect-suspicious-applications ((tree t) &optional (enclosing-function "toplevel") arg-counts)
   "Find the suspiciously long applications or applications not matching the arglists."
-  (declare (ignorable arg-counts))
+  (declare (ignorable enclosing-function arg-counts))
   tree)
 
 (defmethod detect-suspicious-applications ((tree cons) &optional (enclosing-function "toplevel") arg-counts)
