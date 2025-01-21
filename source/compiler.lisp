@@ -81,9 +81,30 @@
                        (warn-on-suspicious-applications subtree enclosing-function arg-counts))
                      tree))))))
 
+(define-generic warn-on-shadowing ((tree t) &optional path)
+  "Check whether any of the functions override the ones defined earlier."
+  (declare (ignorable path))
+  tree)
+
+(defmethod warn-on-shadowing ((tree cons) &optional path)
+  (let ((head (first tree)))
+    (if (eq 'let head)
+        (destructuring-bind (let ((name value)) body)
+            tree
+          (declare (ignorable let))
+          (when (find name path)
+            (warn "Function ~a is redefined/shadowed to another value near ~a"
+                  name (car path)))
+          `(,let ((,name ,(warn-on-shadowing value (cons name path))))
+             ,(warn-on-shadowing body (cons name path))))
+        (mapcar (lambda (subtree)
+                  (warn-on-shadowing subtree path))
+                tree))))
+
 (defun optimize (tree)
-  (warn-on-suspicious-applications
-   (warn-on-unbound
-    (tree-shake
+  (warn-on-shadowing
+   (warn-on-suspicious-applications
+    (warn-on-unbound
      (tree-shake
-      (tree-shake tree))))))
+      (tree-shake
+       (tree-shake tree)))))))
