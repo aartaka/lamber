@@ -24,7 +24,7 @@
     (%read (uiop:slurp-stream-forms in)))
   (:method ((list list))
     (cond
-      ((memqual-string (first list) '("let" "def" "local" "var" "alias"))
+      ((memqual-string (first list) '("let" "def" "define" "local" "var" "alias"))
        (let ((name (second list))
              (value-list (nthcdr (if (memqual-string (third list) '("=" ":=" "<-")) 3 2)
                                  list)))
@@ -65,7 +65,7 @@
             next))))
       (t
        (loop for elem in list
-             until (ignore-errors (memqual-string elem '("let" "def" "local" "var" "alias" "if" "then" "else" "end" ".")))
+             until (ignore-errors (memqual-string elem '("let" "def" "define" "local" "var" "alias" "if" "then" "else" "end" ".")))
              collect elem into prefix
              finally (let* ((suffix (nthcdr (length prefix) list))
                             (suffix (strip-end suffix))
