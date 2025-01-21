@@ -121,11 +121,10 @@
                 tree))))
 
 (defun optimize (tree)
-  (warn-on-shadowing
-   (warn-on-suspicious-applications
-    (warn-on-unbound
-     (tree-shake
-      (tree-shake
-       (tree-shake
-        (plug-dummy-for-lib
-         tree))))))))
+  (tree-shake
+   (tree-shake
+    (tree-shake
+     (warn-on-shadowing
+      (warn-on-suspicious-applications
+       (warn-on-unbound
+        (plug-dummy-for-lib tree))))))))
