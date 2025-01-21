@@ -49,7 +49,7 @@
                  (warn-on-unbound subtree enclosing-function path))
                tree))))
 
-(define-generic detect-suspicious-applications ((tree t) &optional (enclosing-function "toplevel") arg-counts)
+(define-generic warn-on-suspicious-applications ((tree t) &optional (enclosing-function "toplevel") arg-counts)
   "Find the suspiciously long applications or applications not matching the arglists."
   (declare (ignorable enclosing-function arg-counts))
   tree)
