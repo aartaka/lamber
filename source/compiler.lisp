@@ -38,7 +38,12 @@
   tree)
 
 (defmethod warn-on-unbound ((tree symbol) &optional (enclosing-function "toplevel") path)
-  (if (member tree path)
+  (if (or (member tree path)
+          (memqual-string tree
+                          '("let" "def" "define" "local" "var" "alias"
+                            "if" "when" "then" "else"
+                            "fn" "lambda" "function"
+                            "end" ".")))
       tree
       (progn
         (warn "Symbol ~a appears to be unbound in ~a" tree enclosing-function)
