@@ -3,7 +3,7 @@
 
 (in-package :lamber)
 
-(defgeneric lambda-ify (thing)
+(defgeneric %lambda-ify (thing)
   (:method ((thing (eql '|true|)))
     true-var)
   (:method ((thing (eql '|false|)))
@@ -15,10 +15,10 @@
   (:method ((thing string))
     (loop with acc = nil-var
           for char across (reverse thing)
-          do (setf acc `(lambda (z) (z ,(lambda-ify char) ,acc)))
+          do (setf acc `(lambda (z) (z ,(%lambda-ify char) ,acc)))
           finally (return acc)))
   (:method ((thing character))
-    (lambda-ify (char-code thing)))
+    (%lambda-ify (char-code thing)))
   (:method ((thing integer))
     (loop with acc = 'zero
           repeat thing
@@ -28,9 +28,9 @@
     (labels ((format-cons (cons)
                (when cons
                  (if (eq '|\|| (car cons))
-                     (lambda-ify (second cons))
+                     (%lambda-ify (second cons))
                      `(lambda (z)
-                        (z ,(lambda-ify (car cons))
+                        (z ,(%lambda-ify (car cons))
                            ,(or (format-cons (cdr cons)) nil-var)))))))
       (format-cons (coerce thing 'list))))
   (:method ((thing cons))
@@ -39,7 +39,7 @@
                thing
              (declare (ignorable let))
              `((lambda (,name)
-                 ,(lambda-ify body))
+                 ,(%lambda-ify body))
                ,(if (tree-find name value)
                     ;; Automatic recursive functions with Z-combinator
                     (let ((recur (gensym (uiop:strcat (string name) "-recur"))))
@@ -52,23 +52,23 @@
                              (f (lambda (y)
                                   ((x x) y))))))
                         (lambda (,recur)
-                          ,(lambda-ify (subst recur name value)))))
-                    (lambda-ify value)))))
+                          ,(%lambda-ify (subst recur name value)))))
+                    (%lambda-ify value)))))
       (if (destructuring-bind (if cond then else)
               thing
             (declare (ignorable if))
-            `((,(lambda-ify cond)
-               (lambda (,(gensym)) ,(lambda-ify then))
-               (lambda (,(gensym)) ,(lambda-ify else))))))
+            `((,(%lambda-ify cond)
+               (lambda (,(gensym)) ,(%lambda-ify then))
+               (lambda (,(gensym)) ,(%lambda-ify else))))))
       (lambda (destructuring-bind (lambda (arg &rest args) body)
                   thing
                 (declare (ignorable lambda))
                 `(lambda (,arg)
-                   ,(lambda-ify
+                   ,(%lambda-ify
                      (if args
                          `(lambda (,@args) ,body)
                          body)))))
-      (t (mapcar #'lambda-ify thing)))))
+      (t (mapcar #'%lambda-ify thing)))))
 
 (defun %process-applications (term)
   (cond
@@ -86,8 +86,11 @@
                    ,(%process-applications (second term)))))
     (t term)))
 
+(defun lambda-ify (term)
+  (%process-applications (%lambda-ify term)))
+
 (defun eval (term)
-  (cl:eval (%process-applications (lambda-ify (optimize term)))))
+  (cl:eval (lambda-ify (optimize term))))
 
 (defun run-with-lib (in &optional lib)
   (let* ((main (etypecase in
