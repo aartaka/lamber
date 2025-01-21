@@ -3,10 +3,6 @@
 
 (in-package :lamber)
 
-(defvar nil-var '(lambda (thn) (lambda (els) els)))
-(defvar false-var nil-var)
-(defvar true-var '(lambda (thn) (lambda (els) thn)))
-
 (defun memqual-string (item list)
   (member item list
           :test (lambda (a b)
