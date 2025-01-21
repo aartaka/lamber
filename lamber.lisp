@@ -43,14 +43,19 @@
              (%read (if (ignore-errors (string-equal "then" (first rest)))
                         (rest rest)
                         rest))
-           (assert (string-equal (first rest) "else"))
-           (multiple-value-bind (else remaining)
-               (%read (rest rest))
-             (values
-              `(if ,condition
-                   ,then
-                   ,else)
-              remaining)))))
+           (if (string-equal (first rest) "else")
+               (multiple-value-bind (else remaining)
+                   (%read (rest rest))
+                 (values
+                  `(if ,condition
+                       ,then
+                       ,else)
+                  remaining))
+               (values
+                `(if ,condition
+                     ,then
+                     ,nil-var)
+                rest)))))
       ((memqual-string (first list) '("fn" "lambda" "function"))
        (let ((args (second list)))
          (multiple-value-bind (body next)
