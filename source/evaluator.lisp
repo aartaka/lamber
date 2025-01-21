@@ -78,7 +78,7 @@
     (t term)))
 
 (defun eval (term)
-  (cl:eval (%eval-process (lambda-ify term))))
+  (cl:eval (%eval-process (lambda-ify (optimize term)))))
 
 (defun run-with-lib (in &optional lib)
   (let* ((main (etypecase in
