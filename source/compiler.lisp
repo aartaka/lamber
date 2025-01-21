@@ -18,19 +18,19 @@
                ,(tree-shake body))))
       (mapcar #'tree-shake tree)))
 
-(define-generic find-unbound ((tree t) &optional (enclosing-function "toplevel") path)
+(define-generic warn-on-unbound ((tree t) &optional (enclosing-function "toplevel") path)
   "Warn about all the unbound variables."
   (declare (ignorable tree enclosing-function path))
   tree)
 
-(defmethod find-unbound ((tree symbol) &optional (enclosing-function "toplevel") path)
+(defmethod warn-on-unbound ((tree symbol) &optional (enclosing-function "toplevel") path)
   (if (member tree path)
       tree
       (progn
         (warn "Symbol ~a appears to be unbound in ~a" tree enclosing-function)
         tree)))
 
-(defmethod find-unbound ((tree cons) &optional (enclosing-function "toplevel") path)
+(defmethod warn-on-unbound ((tree cons) &optional (enclosing-function "toplevel") path)
   (case (first tree)
     (let (destructuring-bind (let ((name value)) body)
              tree
@@ -38,15 +38,15 @@
            ;; NOTE: (cons name path) is because the let-bound function
            ;; might be recursive (I know it's not a cool thing to
            ;; encode this in IR syntax, but oh well.)
-           `(,let ((,name ,(find-unbound value name (cons name path))))
-              ,(find-unbound body enclosing-function (cons name path)))))
+           `(,let ((,name ,(warn-on-unbound value name (cons name path))))
+              ,(warn-on-unbound body enclosing-function (cons name path)))))
     (lambda (destructuring-bind (lambda (&rest args) body)
                 tree
               (declare (ignorable lambda))
               `(lambda (,@args)
-                 ,(find-unbound body enclosing-function (append args path)))))
+                 ,(warn-on-unbound body enclosing-function (append args path)))))
     (t (mapcar (lambda (subtree)
-                 (find-unbound subtree enclosing-function path))
+                 (warn-on-unbound subtree enclosing-function path))
                tree))))
 
 (define-generic detect-suspicious-applications ((tree t) &optional (enclosing-function "toplevel") arg-counts)
@@ -54,7 +54,7 @@
   (declare (ignorable enclosing-function arg-counts))
   tree)
 
-(defmethod detect-suspicious-applications ((tree cons) &optional (enclosing-function "toplevel") arg-counts)
+(defmethod warn-on-suspicious-applications ((tree cons) &optional (enclosing-function "toplevel") arg-counts)
   (let ((head (first tree)))
     (if (eq 'let head)
         (destructuring-bind (let ((name value)) body)
@@ -65,8 +65,8 @@
                                 (cons (cons name (length (second value)))
                                       arg-counts)
                                 arg-counts)))
-            `(,let ((,name ,(detect-suspicious-applications value name arg-counts)))
-               ,(detect-suspicious-applications body enclosing-function arg-counts))))
+            `(,let ((,name ,(warn-on-suspicious-applications value name arg-counts)))
+               ,(warn-on-suspicious-applications body enclosing-function arg-counts))))
         (cond
           ((and (symbolp head)
                 (assoc head arg-counts)
@@ -78,18 +78,12 @@
            (warn "Too many arguments (~d) to ~a in ~a, did you forget to wrap some arguments in colons or parentheses?"
                  (length (rest tree)) head enclosing-function))
           (t (mapcar (lambda (subtree)
-                       (detect-suspicious-applications subtree enclosing-function arg-counts))
+                       (warn-on-suspicious-applications subtree enclosing-function arg-counts))
                      tree))))))
 
-(detect-suspicious-applications
- (read "def pair fn (head tail f)
-  f x y .
-def a fn (x) pair 1 2 3 4 5 6 .
-a 3"))
-
 (defun optimize (tree)
-  (detect-suspicious-applications
-   (find-unbound
+  (warn-on-suspicious-applications
+   (warn-on-unbound
     (tree-shake
      (tree-shake
       (tree-shake tree))))))
