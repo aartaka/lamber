@@ -1,0 +1,16 @@
+def lines fn (string)
+  let not-newline = (complement (char= '\n')) .
+  if some (char= '\n') string
+    then cons : takewhile not-newline string
+              : lines : cdr : dropwhile not-newline string
+   else
+     singleton string
+end
+
+def words fn (string)
+  if some isspace string
+    then cons : takewhile (complement isspace) string
+              : words : dropwhile isspace : dropwhile (complement isspace) string
+   else
+     singleton string
+end
