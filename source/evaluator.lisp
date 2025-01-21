@@ -29,37 +29,36 @@
       (let (destructuring-bind (let ((name value)) body)
                thing
              (declare (ignorable let))
-             ;; XXX: Tree-shaking. More (2? 3?) passes won't hurt, but
-             ;; let's have this for now.
-             (if (not (tree-find name body))
-                 (lambda-ify body)
-                 `((lambda (,name)
-                     ,(lambda-ify body))
-                   ,(if (tree-find name value)
-                        ;; Automatic recursive functions with Z-combinator
-                        (let ((recur (gensym (uiop:strcat (string name) "-recur"))))
-                          ;; Z-combinator (what an unfortunate name...)
-                          `((lambda (f)
-                              ((lambda (x)
-                                 (f (lambda (y)
-                                      ((x x) y))))
-                               (lambda (x)
-                                 (f (lambda (y)
-                                      ((x x) y))))))
-                            (lambda (,recur)
-                              ,(lambda-ify (subst recur name value)))))
-                        (lambda-ify value))))))
+             `((lambda (,name)
+                 ,(lambda-ify body))
+               ,(if (tree-find name value)
+                    ;; Automatic recursive functions with Z-combinator
+                    (let ((recur (gensym (uiop:strcat (string name) "-recur"))))
+                      ;; Z-combinator (what an unfortunate name...)
+                      `((lambda (f)
+                          ((lambda (x)
+                             (f (lambda (y)
+                                  ((x x) y))))
+                           (lambda (x)
+                             (f (lambda (y)
+                                  ((x x) y))))))
+                        (lambda (,recur)
+                          ,(lambda-ify (subst recur name value)))))
+                    (lambda-ify value)))))
       (if (destructuring-bind (if cond then else)
               thing
             (declare (ignorable if))
             `((,(lambda-ify cond)
                (lambda (,(gensym)) ,(lambda-ify then))
                (lambda (,(gensym)) ,(lambda-ify else))))))
-      (lambda (destructuring-bind (lambda (arg) body)
+      (lambda (destructuring-bind (lambda (arg &rest args) body)
                   thing
                 (declare (ignorable lambda))
                 `(lambda (,arg)
-                   ,(lambda-ify body))))
+                   ,(lambda-ify
+                     (if args
+                         `(lambda (,@args) ,body)
+                         body)))))
       (t (mapcar #'lambda-ify thing)))))
 
 (defun %eval-process (term)
