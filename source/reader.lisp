@@ -3,11 +3,6 @@
 
 (in-package :lamber)
 
-(defun memqual-string (item list)
-  (member item list
-          :test (lambda (a b)
-                  (ignore-errors (string-equal a b)))))
-
 (defun strip-end (list)
   (if (memqual-string (first list) '("end" "then" "."))
       (rest list)

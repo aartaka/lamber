@@ -19,3 +19,8 @@
      (:documentation ,documentation)
      (:method (,@args)
        ,@body)))
+
+(defun memqual-string (item list)
+  (member item list
+          :test (lambda (a b)
+                  (ignore-errors (string-equal a b)))))
