@@ -186,6 +186,9 @@ def apply fn (f list)
 end
 
 def intersperce fn (elem list)
-  butlast : foldr (fn (e a) [e elem | a]) nil list
+  butlast : foldr (fn (e a) [e elem | a]) nil list .
 
 alias interpose intersperce .
+
+def intercalate fn (list lists)
+  foldr concat nil  : intersperce list lists .
