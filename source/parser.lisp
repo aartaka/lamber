@@ -97,14 +97,7 @@
 (defun read-square-bracket (stream char)
   (declare (ignorable char))
   (let ((list (read-delimited-list #\] stream t)))
-    (labels ((format-cons (cons)
-               (when cons
-                 (if (eq '|\|| (car cons))
-                     (second cons)
-                     `(lambda (z)
-                        (z ,(car cons)
-                           ,(or (format-cons (cdr cons)) nil-var)))))))
-      (format-cons list))))
+    (coerce list 'vector)))
 
 (defun read-colon (stream char)
   (declare (ignorable char))
