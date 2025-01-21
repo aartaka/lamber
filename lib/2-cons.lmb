@@ -1,5 +1,5 @@
 def cons fn (head tail f)
-  f x y .
+  f head tail .
 
 alias pair cons .
 
