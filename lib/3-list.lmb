@@ -191,4 +191,4 @@ def intersperce fn (elem list)
 alias interpose intersperce .
 
 def intercalate fn (list lists)
-  foldr concat nil  : intersperce list lists .
+  foldr concat nil : intersperce list lists .
