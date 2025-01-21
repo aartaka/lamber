@@ -73,7 +73,7 @@
                 (> (length (rest tree))
                    ;; NOTE: An imperfect heuristic for curried
                    ;; functions. Any other number?
-                   (cdr (assoc head arg-counts))))
+                   (+ 2 (cdr (assoc head arg-counts)))))
            ;; FIXME: Should I call the parameters, like PL designers?
            (warn "Too many arguments (~d) to ~a in ~a, did you forget to wrap some arguments in colons or parentheses?"
                  (length (rest tree)) head enclosing-function))
