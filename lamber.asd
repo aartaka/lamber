@@ -20,7 +20,7 @@
                 :components
                 ((:file "package")
                  (:file "utils")
-                 (:file "parser")
+                 (:file "reader")
                  (:file "compiler")
                  (:file "evaluator")
                  (:file "printer")
