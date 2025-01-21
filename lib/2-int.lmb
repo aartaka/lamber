@@ -18,8 +18,8 @@ def mult fn (m n f)
 alias * mult .
 alias × mult .
 
-def pow fn (b e)
-  e b .
+def pow fn (base expt)
+  expt base .
 
 alias ** pow .
 alias ^ pow .
