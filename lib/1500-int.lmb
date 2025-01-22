@@ -6,14 +6,14 @@ alias ++ succ .
 alias incf succ .
 alias inc succ .
 
-def add fn (m n f x)
-  m f : n f x .
+def add fn (augend addend f x)
+  augend f : addend f x .
 
 alias + add .
 alias plus add .
 
-def mult fn (m n f)
-  m : n f .
+def mult fn (multiplicand multiplier f)
+  multiplicand : multiplier f .
 
 alias * mult .
 alias × mult .
@@ -36,8 +36,8 @@ alias -- pred .
 alias decf pred .
 alias dec pred .
 
-def sub fn (m n)
-  n pred m .
+def sub fn (minuend subtrahend)
+  subtrahend pred minuend .
 
 alias - sub .
 alias minus sub .
@@ -90,20 +90,20 @@ def geq fn (m n)
 alias ≥ geq .
 alias >= geq .
 
-def div fn (numer denom)
+def div fn (dividend divisor)
   local %div = fn quot
-    when lt quot denom
+    when lt quot divisor
     then 0
-    else : succ : %div : sub quot denom
+    else : succ : %div : sub quot divisor
   end
-  %div numer
+  %div dividend
 end
 
 alias / div .
 alias quot div .
 
-def mod fn (numer denom)
-  sub numer : mult denom : div numer denom .
+def mod fn (dividend divisor)
+  sub dividend : mult divisor : div dividend divisor .
 
 alias % mod .
 alias rem mod .
