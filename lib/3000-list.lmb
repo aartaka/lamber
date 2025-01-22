@@ -21,6 +21,8 @@ def rcons fn (a b)
 def concatmap fn (f list)
   foldr concat nil : map f list .
 
+alias concatMap concatmap .
+
 def length fn list
   foldr (fn (e a) succ a) 0 list .
 
@@ -129,6 +131,8 @@ def takewhile fn (pred list)
   %takewhile list
 end
 
+alias takewhile takeWhile .
+
 def dropwhile fn (pred list)
   local %dropwhile = fn l
     if (pred (car l))
@@ -137,6 +141,8 @@ def dropwhile fn (pred list)
   end
   %dropwhile list
 end
+
+alias dropwhile dropWhile .
 
 def split fn (n list)
   cons (take n list) (drop n list) .
