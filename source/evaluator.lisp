@@ -115,6 +115,11 @@
                                   (append a (list (make-string-input-stream (string #\Newline)) e)))
                                 (append (mapcar #'open lib-files)
                                         (list main))
-                                :initial-value '())))
-         (read (read stream)))
-    (eval read)))
+                                :initial-value '()))))
+
+    (multiple-value-bind (read rest)
+        (read stream)
+      (if rest
+          (warn "Some forms weren't processed. Did you add a redundant 'end'/'.' before '~{~a~^ ~}'?"
+                (subseq rest 0 (min (length rest) 10)))
+          (eval read)))))
