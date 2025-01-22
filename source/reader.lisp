@@ -114,7 +114,8 @@
   '|end|)
 
 (defun read (in)
-  (let ((*readtable* (copy-readtable *readtable*)))
+  (let ((*readtable* (copy-readtable *readtable*))
+        (*package* (find-package :lamber)))
     (setf (readtable-case *readtable*) :preserve)
     (set-macro-character #\' #'read-quoted-char)
     (set-macro-character #\[ #'read-square-bracket nil)
