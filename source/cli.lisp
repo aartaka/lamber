@@ -10,7 +10,8 @@
          (type (car (last args)))
          (executable (car (last args 2)))
          (result (run-with-lib
-                  (or (ignore-errors (uiop:parse-native-namestring executable))
+                  (if (uiop:file-exists-p (uiop:parse-native-namestring executable))
+                      (uiop:parse-native-namestring executable)
                       executable)
                   libs)))
     (flet ((print-typed (result type)
