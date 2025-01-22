@@ -204,3 +204,14 @@ alias interpose intersperce .
 
 def intercalate fn (list lists)
   foldr concat nil : intersperce list lists .
+
+def index fn (pred list)
+  local %index = fn (h t idx)
+    if (pred h)
+    then idx
+    else t %index : succ idx
+  end
+  ;; FIXME: Is there a better default value?
+  ;; MAXINT something?
+  list %index 0
+end
