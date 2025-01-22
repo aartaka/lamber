@@ -131,7 +131,7 @@ def takewhile fn (pred list)
   %takewhile list
 end
 
-alias takewhile takeWhile .
+alias takeWhile takewhile .
 
 def dropwhile fn (pred list)
   local %dropwhile = fn l
@@ -142,7 +142,7 @@ def dropwhile fn (pred list)
   %dropwhile list
 end
 
-alias dropwhile dropWhile .
+alias dropWhile dropwhile .
 
 def split fn (n list)
   cons (take n list) (drop n list) .
