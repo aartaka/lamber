@@ -1,10 +1,10 @@
-def deduplicate fn (p l)
+def deduplicate fn (eq list)
   local %deduplicate = fn (e a)
-    if (some (fn (x) (p x e)) a)
+    if (some (fn (x) (eq x e)) a)
     then a
     else cons e a
   end
-  foldr %deduplicate nil l
+  foldr %deduplicate nil list
 end
 
 alias nub deduplicate .
@@ -12,13 +12,13 @@ alias set deduplicate .
 alias dedup deduplicate .
 alias dedupe deduplicate .
 
-def difference fn (p a b)
-  deduplicate : remove (fn (e) some (fn (x) p x e) b) a .
+def difference fn (eq a b)
+  deduplicate : remove (fn (e) some (fn (x) eq x e) b) a .
 
-def intersection fn (p a b)
-  deduplicate : filter (fn (e) some (fn (x) p x e) b) a .
+def intersection fn (eq a b)
+  deduplicate : filter (fn (e) some (fn (x) eq x e) b) a .
 
 alias intersect intersection .
 
-def union fn (p a b)
-  deduplicate p : concat a b .
+def union fn (eq a b)
+  deduplicate eq : concat a b .
