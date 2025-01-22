@@ -109,10 +109,12 @@
                             (uiop:ensure-list l)))
                       (uiop:ensure-list lib))))
          (lib-files (sort lib-files #'string-lessp
-                          :key #'pathname-name)))
-    (eval (read (apply #'make-concatenated-stream
-                       (reduce (lambda (a e)
-                                 (append a (list (make-string-input-stream (string #\Newline)) e)))
-                               (append (mapcar #'open lib-files)
-                                       (list main))
-                               :initial-value '()))))))
+                          :key #'pathname-name))
+         (stream (apply #'make-concatenated-stream
+                        (reduce (lambda (a e)
+                                  (append a (list (make-string-input-stream (string #\Newline)) e)))
+                                (append (mapcar #'open lib-files)
+                                        (list main))
+                                :initial-value '())))
+         (read (read stream)))
+    (eval read)))
