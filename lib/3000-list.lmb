@@ -1,15 +1,15 @@
-def foldr fn (f i l)
+def foldr fn (f init list)
   local %foldr = fn (h t z)
     f h : t %foldr z
   end
-  l %foldr i
+  list %foldr init
 end
 
-def map fn (f l)
+def map fn (f list)
   local %map = fn (h t i)
     cons (f h) (t %map i)
   end
-  l %map nil
+  list %map nil
 end
 
 def concat fn (a b)
@@ -18,59 +18,59 @@ def concat fn (a b)
 def rcons fn (a b)
   concat a : cons b nil .
 
-def concatmap fn (f l)
-  foldr concat nil : map f l .
+def concatmap fn (f list)
+  foldr concat nil : map f list .
 
-def length fn l
-  foldr (fn (e a) succ a) 0 l .
+def length fn list
+  foldr (fn (e a) succ a) 0 list .
 
-def filter fn (f l)
+def filter fn (pred list)
   local %filter = fn (e a)
-    if (f e)
+    if (pred e)
     then (cons e a)
     else a
   end
-  foldr %filter nil l
+  foldr %filter nil pred
 end
 
-def remove fn (f l)
-  filter (complement f) l .
+def remove fn (pred list)
+  filter (complement pred) list .
 
-def reverse fn l
+def reverse fn list
   local %reverse = fn (h t i)
     t %reverse : cons h i
   end
-  l %reverse nil
+  list %reverse nil
 end
 
-def some fn (f l)
-  foldr or false : map f l .
+def some fn (pred list)
+  foldr or false : map pred list .
 
-def all fn (f l)
-  foldr and true : map f l .
+def all fn (pred list)
+  foldr and true : map pred list .
 
-def none fn (f l)
-  not : some f l .
+def none fn (pred list)
+  not : some pred list .
 
-def notevery fn (f l)
-  not : all f l .
+def notevery fn (pred list)
+  not : all pred list .
 
-def find fn (p l)
+def find fn (pred list)
   local %find = fn (e a)
-    if (p e)
+    if (pred e)
     then e
     else a
   end
-  foldr %find nil l
+  foldr %find nil list
 end
 
-def unfoldr fn (f i t)
+def unfoldr fn (step init term)
   local %unfoldr = fn (x)
-    if (t x)
+    if (term x)
     then nil
-    else cons x : %unfoldr : f x
+    else cons x : %unfoldr : step x
   end
-  %unfoldr i
+  %unfoldr init
 end
 
 def iota fn n
@@ -79,76 +79,76 @@ def iota fn n
 def mapiota fn (f n)
   map f : iota n .
 
-def replicate fn (n e)
-  mapiota (fn x e) n .
+def replicate fn (n elem)
+  mapiota (fn x elem) n .
 
-def range fn (s e)
-  mapiota (add s) (sub e s) .
+def range fn (start end)
+  mapiota (add start) (sub end start) .
 
-def last fn (l)
+def last fn (list)
   local %last = fn l
     if (null (cdr l))
     then car l
     else %last : cdr l
   end
-  %last l
+  %last list
 end
 
-def butlast fn (l)
+def butlast fn (list)
   local %butlast = fn l
     if (null (cdr l))
     then nil
     else cons (car l) : %butlast : cdr l
   end
-  %butlast l
+  %butlast list
 end
 
-def rotatel fn (l)
-    rcons (cdr l) (car l) .
+def rotatel fn (list)
+    rcons (cdr list) (car list) .
 
-def rotater fn (l)
-    cons (last l) (butlast l) .
+def rotater fn (list)
+    cons (last list) (butlast list) .
 
-def take fn (n l)
+def take fn (n list)
   local %take = fn l
     if (eq n (length l))
     then l
     else %take : butlast l
   end
-  %take l
+  %take list
 end
 
 def drop nthcdr
 
-def takewhile fn (p l)
+def takewhile fn (pred list)
   local %takewhile = fn l
-    if (p (car l))
+    if (pred (car l))
     then cons (car l) : %takewhile : cdr l
     else nil
   end
-  %takewhile l
+  %takewhile list
 end
 
-def dropwhile fn (p l)
+def dropwhile fn (pred list)
   local %dropwhile = fn l
-    if (p (car l))
+    if (pred (car l))
     then %dropwhile : cdr l
     else l
   end
-  %dropwhile l
+  %dropwhile list
 end
 
-def split fn (n l)
-  cons (take n l) (drop n l) .
+def split fn (n list)
+  cons (take n list) (drop n list) .
 
-def splitwhen fn (p l)
-  local prefix = takewhile (complement p) l .
-  local suffix = dropwhile (complement p) l .
+def splitwhen fn (pred list)
+  local prefix = takewhile (complement pred) list .
+  local suffix = dropwhile (complement pred) list .
   cons prefix suffix
 end
 
-def unzip fn (l)
-  cons (map car l) (map cdr l) .
+def unzip fn (list)
+  cons (map car list) (map cdr list) .
 
 def zip fn (a b)
   local %zip = fn (h t b)
@@ -158,15 +158,15 @@ def zip fn (a b)
   a %zip b
 end
 
-def ipairs fn (l)
-  zip (iota : length l) l .
+def ipairs fn (list)
+  zip (iota : length list) list .
 
 def juxt fn (f g x)
   cons (f x) (g x) .
 
-def equal fn (p a b)
+def equal fn (pred a b)
   local %equal = fn e
-    e (fn (h t i) p h t)
+    e (fn (h t i) pred h t)
       false
   end
   all %equal : zip a b
