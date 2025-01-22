@@ -24,5 +24,5 @@
                ((memqual-string type '("char" "character"))
                 (format t "'~a'" (tochar result))))))
       (fresh-line)
-      (print-typed result type)
+      (ignore-errors (print-typed result type))
       (fresh-line))))
