@@ -75,6 +75,7 @@
     ((and (consp term)
           (eq 'lambda (first term)))
      `(lambda ,(second term)
+        (declare (ignorable ,@(second term)))
         ,(%process-applications (third term))))
     ((consp term)
      (if (> (length term) 2)
