@@ -11,14 +11,14 @@ def lookup fn (p a)
   cdr : assoc p a .
 
 def keys fn (a)
-  local loop = fn (h t i)
-    cons (car h) (t loop i) .
-  a loop nil
+  local %keys = fn (h t i)
+    cons (car h) (t %keys i) .
+  a %keys nil
 end
 
 def vals fn (a)
-  local loop = fn (h t i)
-    cons (cdr h) (t loop i)
+  local %vals = fn (h t i)
+    cons (cdr h) (t %vals i)
   end
-  a loop nil
+  a %vals nil
 end

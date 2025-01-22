@@ -91,10 +91,10 @@ alias ≥ geq .
 alias >= geq .
 
 def div fn (numer denom)
-  local loop = fn quot
+  local %div = fn quot
     when lt quot denom
     then 0
-    else : succ : loop : sub quot denom
+    else : succ : %div : sub quot denom
   end
   loop numer
 end
@@ -109,10 +109,10 @@ alias % mod .
 alias rem mod .
 
 def log fn (num base)
-  local loop = fn x
+  local %log = fn x
     when (eq x base)
     then 1
-    else : succ : loop : div x base
+    else : succ : %log : div x base
   end
   loop num
 end

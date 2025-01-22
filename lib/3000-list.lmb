@@ -1,15 +1,15 @@
 def foldr fn (f i l)
-  local loop = fn (h t z)
-    f h : t loop z
+  local %foldr = fn (h t z)
+    f h : t %foldr z
   end
-  l loop i
+  l %foldr i
 end
 
 def map fn (f l)
-  local loop = fn (h t i)
-    cons (f h) (t loop i)
+  local %map = fn (h t i)
+    cons (f h) (t %map i)
   end
-  l loop nil
+  l %map nil
 end
 
 def concat fn (a b)
@@ -25,22 +25,22 @@ def length fn l
   foldr (fn (e a) succ a) 0 l .
 
 def filter fn (f l)
-  local process = fn (e a)
+  local %filter = fn (e a)
     if (f e)
     then (cons e a)
     else a
   end
-  foldr process nil l
+  foldr %filter nil l
 end
 
 def remove fn (f l)
   filter (complement f) l .
 
 def reverse fn l
-  local loop = fn (h t i)
-    t loop : cons h i
+  local %reverse = fn (h t i)
+    t %reverse : cons h i
   end
-  l loop nil
+  l %reverse nil
 end
 
 def some fn (f l)
@@ -56,21 +56,21 @@ def notevery fn (f l)
   not : all f l .
 
 def find fn (p l)
-  local inner = fn (e a)
+  local %find = fn (e a)
     if (p e)
     then e
     else a
   end
-  foldr inner nil l
+  foldr %find nil l
 end
 
 def unfoldr fn (f i t)
-  local loop = fn (x)
+  local %unfoldr = fn (x)
     if (t x)
     then nil
-    else cons x : loop : f x
+    else cons x : %unfoldr : f x
   end
-  loop i
+  %unfoldr i
 end
 
 def iota fn n
@@ -86,21 +86,21 @@ def range fn (s e)
   mapiota (add s) (sub e s) .
 
 def last fn (l)
-  local loop = fn l
+  local %last = fn l
     if (null (cdr l))
     then car l
-    else loop : cdr l
+    else %last : cdr l
   end
-  loop l
+  %last l
 end
 
 def butlast fn (l)
-  local loop = fn l
+  local %butlast = fn l
     if (null (cdr l))
     then nil
-    else cons (car l) : loop : cdr l
+    else cons (car l) : %butlast : cdr l
   end
-  loop l
+  %butlast l
 end
 
 def rotatel fn (l)
@@ -110,32 +110,32 @@ def rotater fn (l)
     cons (last l) (butlast l) .
 
 def take fn (n l)
-  local loop = fn l
+  local %take = fn l
     if (eq n (length l))
     then l
-    else loop : butlast l
+    else %take : butlast l
   end
-  loop l
+  %take l
 end
 
 def drop nthcdr
 
 def takewhile fn (p l)
-  local loop = fn l
+  local %takewhile = fn l
     if (p (car l))
-    then cons (car l) : loop : cdr l
+    then cons (car l) : %takewhile : cdr l
     else nil
   end
-  loop l
+  %takewhile l
 end
 
 def dropwhile fn (p l)
-  local loop = fn l
+  local %dropwhile = fn l
     if (p (car l))
-    then loop : cdr l
+    then %dropwhile : cdr l
     else l
   end
-  loop l
+  %dropwhile l
 end
 
 def split fn (n l)
@@ -151,11 +151,11 @@ def unzip fn (l)
   cons (map car l) (map cdr l) .
 
 def zip fn (a b)
-  local loop = fn (h t b)
+  local %zip = fn (h t b)
     cons (cons h : car b)
-         (t loop : cdr b)
+         (t %zip : cdr b)
   end
-  a loop b
+  a %zip b
 end
 
 def ipairs fn (l)
@@ -165,11 +165,11 @@ def juxt fn (f g x)
   cons (f x) (g x) .
 
 def equal fn (p a b)
-  local destructcmp = fn e
+  local %equal = fn e
     e (fn (h t i) p h t)
       false
   end
-  all destructcmp : zip a b
+  all %equal : zip a b
 end
 
 def insert fn (x cmp list)

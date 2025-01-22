@@ -8,10 +8,10 @@ alias control? iscontrol .
 ;; Yes, it's imperfect.
 ;; Needs Unicode support and more elegant implementation.
 def isspace fn (c)
-  local loop = fn l
+  local %isspace = fn l
     if (null l)
     then false
-    else or (char= c (car l)) (loop (cdr l))
+    else or (char= c (car l)) (%isspace (cdr l))
   end
   loop [' ' '\n' '\t' '\r']
 end

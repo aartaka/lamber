@@ -1,10 +1,10 @@
 def deduplicate fn (p l)
-  local filtering = fn (e a)
+  local %deduplicate = fn (e a)
     if (some (fn (x) (p x e)) a)
     then a
     else cons e a
   end
-  foldr filtering nil l
+  foldr %deduplicate nil l
 end
 
 alias nub deduplicate .
