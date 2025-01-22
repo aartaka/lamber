@@ -13,7 +13,7 @@ def isspace fn (c)
     then false
     else or (char= c (car l)) (%isspace (cdr l))
   end
-  loop [' ' '\n' '\t' '\r']
+  %isspace [' ' '\n' '\t' '\r']
 end
 
 alias spacep isspace .

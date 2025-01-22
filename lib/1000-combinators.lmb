@@ -49,7 +49,7 @@ def O fn (a b)
 def T fn (a b)
   b a .
 
-def W fn (a)
+def W fn (a b)
   a b b .
 
 alias dup W .

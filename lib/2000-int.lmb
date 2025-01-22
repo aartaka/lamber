@@ -96,7 +96,7 @@ def div fn (numer denom)
     then 0
     else : succ : %div : sub quot denom
   end
-  loop numer
+  %div numer
 end
 
 alias / div .
@@ -114,7 +114,7 @@ def log fn (num base)
     then 1
     else : succ : %log : div x base
   end
-  loop num
+  %log num
 end
 
 def min fn (m n)
