@@ -43,6 +43,7 @@
                           '("let" "def" "define" "local" "var" "alias"
                             "if" "when" "then" "else"
                             "fn" "lambda" "function"
+                            "true" "false" "nil"
                             "end" ".")))
       tree
       (progn
