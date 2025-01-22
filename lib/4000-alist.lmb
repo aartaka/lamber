@@ -1,24 +1,24 @@
-def acons fn (k v a)
- cons (cons k v) a .
+def acons fn (key value alist)
+ cons (cons key value) alist .
 
-def assoc fn (p a)
-  find (fn e p : car e) a .
+def assoc fn (pred alist)
+  find (fn e pred : car e) alist .
 
-def rassoc fn (p a)
-  find (fn e p : cdr e) a .
+def rassoc fn (pred alist)
+  find (fn e pred : cdr e) alist .
 
-def lookup fn (p a)
-  cdr : assoc p a .
+def lookup fn (pred alist)
+  cdr : assoc pred alist .
 
-def keys fn (a)
+def keys fn (alist)
   local %keys = fn (h t i)
     cons (car h) (t %keys i) .
-  a %keys nil
+  alist %keys nil
 end
 
-def vals fn (a)
+def vals fn (alist)
   local %vals = fn (h t i)
     cons (cdr h) (t %vals i)
   end
-  a %vals nil
+  alist %vals nil
 end
