@@ -1,0 +1,16 @@
+;; Box/Option/Maybe idea adapted from:
+;; https://text.marvinborner.de/2023-04-07-01.html
+
+def maybe fn (x just none)
+  just x .
+
+alias option maybe .
+
+def isjust fn (maybe)
+  maybe (fn _ false) true .
+
+alias just? isjust .
+alias justp isjust .
+
+def just fn (maybe default)
+  maybe identity default .
