@@ -12,18 +12,21 @@ alias ¬ not .
 alias ⫟ not .
 alias ~ not .
 alias false? not .
+alias negation not .
 
 def and fn (p q)
   p q p .
 
 alias ∧ and .
 alias & and .
+alias conjunction and .
 
 def or fn (p q)
   p p q .
 
 alias | or .
 alias ∨ or .
+alias disjunction or .
 
 def xor fn (p q)
   p (not q) q .
