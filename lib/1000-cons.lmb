@@ -31,3 +31,6 @@ def nth fn (n list)
 
 def singleton fn (elem)
   cons elem nil .
+
+def swap fn (pair)
+  cons (cdr pair) (car pair) .
