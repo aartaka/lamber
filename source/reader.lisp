@@ -136,7 +136,7 @@
     (set-macro-character #\[ #'read-square-bracket nil)
     (set-macro-character #\: #'read-colon)
     (set-macro-character #\, #'read-comma)
-    (set-macro-character #\. #'read-end-period)
+    (set-macro-character #\. #'read-end-period t)
     (set-macro-character #\] nil)
     (set-macro-character #\| nil)
     (%read in)))
