@@ -72,19 +72,21 @@
                                         prefix)))
                        (return (values prefix suffix))))))))
 
+(defun get-escaped-char (char)
+  (case char
+    (#\a #\Bell)
+    (#\b #\Backspace)
+    (#\n #\Newline)
+    (#\r #\Return)
+    (#\t #\Tab)
+    (t char)))
+
 (defun read-quoted-char (stream char)
   (declare (ignorable char))
   (loop for c = (read-char stream)
         if (char= #\\ c)
           do (let ((next (read-char stream)))
-               (setf
-                c (case next
-                    (#\a #\Bell)
-                    (#\b #\Backspace)
-                    (#\n #\Newline)
-                    (#\r #\Return)
-                    (#\t #\Tab)
-                    (t next))))
+               (setf c (get-escaped-char next)))
         do (assert (char= #\' (read-char stream))
                    () "Character literal can only be one char long")
         do (return c)))
