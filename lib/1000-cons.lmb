@@ -1,6 +1,6 @@
 ;; Technically an alias for built-in "cons",
 ;; but let's use "cons" explicitly for typing here.
-def pair (head tail)
+def pair fn (head tail)
   cons head tail .
 
 def car fn (pair)
