@@ -1,5 +1,6 @@
 ;; Box/Option/Maybe idea adapted from:
 ;; https://text.marvinborner.de/2023-04-07-01.html
+;; none is nil is false is 0
 
 def maybe fn (x just none)
   just x .
