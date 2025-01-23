@@ -10,6 +10,8 @@
     false-var)
   (:method ((thing (eql '|nil|)))
     nil-var)
+  (:method ((thing (eql '|cons|)))
+    cons-var)
   (:method ((thing symbol))
     thing)
   (:method ((thing string))
@@ -24,15 +26,6 @@
           repeat thing
           do (setf acc (list 'f acc))
           finally (return `(lambda (f) (lambda (zero) ,acc)))))
-  (:method ((thing vector))
-    (labels ((format-cons (cons)
-               (when cons
-                 (if (eq '|\|| (car cons))
-                     (%lambda-ify (second cons))
-                     `(lambda (z)
-                        (z ,(%lambda-ify (car cons))
-                           ,(or (format-cons (cdr cons)) nil-var)))))))
-      (format-cons (coerce thing 'list))))
   (:method ((thing cons))
     (case (first thing)
       (let (destructuring-bind (let ((name value)) body)
@@ -68,6 +61,9 @@
                      (if args
                          `(lambda (,@args) ,body)
                          body)))))
+      (|cons| `(lambda (z)
+                 (z ,(%lambda-ify (second thing))
+                    ,(%lambda-ify (third thing)))))
       (t (mapcar #'%lambda-ify thing)))))
 
 (defun %process-applications (term)
