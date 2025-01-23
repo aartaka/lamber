@@ -91,6 +91,18 @@
                    () "Character literal can only be one char long")
         do (return c)))
 
+(defun read-string (stream char)
+  (declare (ignorable char))
+  (loop for c = (read-char stream)
+        until (char= #\" c)
+        if (char= #\\ c)
+          collect (get-escaped-char (read-char stream))
+            into str
+        else
+          collect c
+            into str
+        finally (return (coerce str 'string))))
+
 (defun read-square-bracket (stream char)
   (declare (ignorable char))
   (let ((list (read-delimited-list #\] stream t)))
@@ -120,6 +132,7 @@
         (*package* (find-package :lamber)))
     (setf (readtable-case *readtable*) :preserve)
     (set-macro-character #\' #'read-quoted-char)
+    (set-macro-character #\" #'read-string)
     (set-macro-character #\[ #'read-square-bracket nil)
     (set-macro-character #\: #'read-colon)
     (set-macro-character #\, #'read-comma)
