@@ -1,7 +1,7 @@
-def cons fn (head tail f)
-  f head tail .
-
-alias pair cons .
+;; Technically an alias for built-in "cons",
+;; but let's use "cons" explicitly for typing here.
+def pair (head tail)
+  cons head tail .
 
 def car fn (pair)
   pair true .
