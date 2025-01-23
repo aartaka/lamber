@@ -8,6 +8,9 @@
   (warn "No code to evaluate, doing a dry checking run on a library")
   0)
 
+(defmethod plug-dummy-for-lib ((tree t))
+  tree)
+
 (defmethod plug-dummy-for-lib ((tree cons))
   (if (eq 'let (first tree))
       (destructuring-bind (let ((name value)) body)
