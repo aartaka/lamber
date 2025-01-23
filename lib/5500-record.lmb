@@ -1,14 +1,11 @@
 ;; FIXME: Better (recursive?) implementation with arbitrary args?
-def record fn (n)
-   if      (eq n 1) then (fn (a x) x a)
-   else if (eq n 2) then cons
-   else if (eq n 3) then (fn (a b c x) x a b c)
-   else if (eq n 4) then (fn (a b c d x) x a b c d)
-   else if (eq n 5) then (fn (a b c d e x) x a b c d e)
-   else if (eq n 6) then (fn (a b c d e f x) x a b c d e f)
-   else if (eq n 7) then (fn (a b c d e f g x) x a b c d e f g)
-   else constantly nil
-end
+def record1 fn (a x) x a .
+def record2 fn (a b x) cons .
+def record3 fn (a b c x) x a b c .
+def record4 fn (a b c d x) x a b c d .
+def record5 fn (a b c d e x) x a b c d e .
+def record6 fn (a b c d e f x) x a b c d e f .
+def record7 fn (a b c d e f g x) x a b c d e f g .
 
 def record1.0 fn (r) r identity .
 def record2.0 fn (r) r (fn (a b) a) .
