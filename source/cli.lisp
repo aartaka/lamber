@@ -13,7 +13,7 @@
              (result (run-with-lib
                       (if (uiop:file-exists-p (uiop:parse-native-namestring executable))
                           (uiop:parse-native-namestring executable)
-                        executable)
+                          executable)
                       libs)))
         (flet ((print-typed (result type)
                             (cond
