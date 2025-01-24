@@ -124,11 +124,26 @@
                   (warn-on-shadowing subtree path))
                 tree))))
 
+(define-generic dry-run-p ((tree t))
+  "Check whether we're running in dry run mode."
+  t)
+
+(defmethod dry-run-p ((tree cons))
+  (let ((head (first tree)))
+    (if (eq 'let head)
+        (dry-run-p (third tree))
+        nil)))
+
 (defun optimize (tree)
-  (tree-shake
-   (tree-shake
-    (tree-shake
-     (warn-on-shadowing
-      (warn-on-suspicious-applications
-       (warn-on-unbound
-        (plug-dummy-for-lib tree))))))))
+  (let ((optimized (tree-shake
+                    (tree-shake
+                     (tree-shake
+                      (warn-on-shadowing
+                       (warn-on-suspicious-applications
+                        (warn-on-unbound
+                         (plug-dummy-for-lib tree)))))))))
+    (if (dry-run-p optimized)
+        '|nil|
+        optimized)))
+
+(eval (optimize (read #p"~/git/lamber/test.lmb")))
