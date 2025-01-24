@@ -34,3 +34,42 @@ def singleton fn (elem)
 
 def swapcons fn (pair)
   cons (cdr pair) (car pair) .
+
+def caar = fn l   car : car l .
+def cadr = fn l   car : cdr l .
+def cdar = fn l   cdr : car l .
+def cddr = fn l   cdr : cdr l .
+def caaar = fn l  car : car : car l .
+def caadr = fn l  car : car : cdr l .
+def cadar = fn l  car : cdr : car l .
+def caddr = fn l  car : cdr : cdr l .
+def cdaar = fn l  cdr : car : car l .
+def cddar = fn l  cdr : cdr : car l .
+def cdddr = fn l  cdr : cdr : cdr l .
+def caaaar = fn l car : car : car : car l .
+def caaadr = fn l car : car : car : cdr l .
+def caadar = fn l car : car : cdr : car l .
+def caaddr = fn l car : car : cdr : cdr l .
+def cadaar = fn l car : cdr : car : car l .
+def cadadr = fn l car : cdr : car : cdr l .
+def caddar = fn l car : cdr : cdr : car l .
+def cadddr = fn l car : cdr : cdr : cdr l .
+def cdaaar = fn l cdr : car : car : car l .
+def cdaadr = fn l cdr : car : car : cdr l .
+def cdadar = fn l cdr : car : cdr : car l .
+def cdaddr = fn l cdr : car : cdr : cdr l .
+def cddaar = fn l cdr : cdr : car : car l .
+def cddadr = fn l cdr : cdr : car : cdr l .
+def cdddar = fn l cdr : cdr : cdr : car l .
+def cddddr = fn l cdr : cdr : cdr : cdr l .
+
+def first = compose car : 0 cdr
+def second = compose car : 1 cdr
+def third = compose car : 2 cdr
+def fourth = compose car : 3 cdr
+def fifth = compose car : 4 cdr
+def sixth = compose car : 5 cdr
+def seventh = compose car : 6 cdr
+def eighth = compose car : 7 cdr
+def ninth = compose car : 8 cdr
+def tenth = compose car : 9 cdr
