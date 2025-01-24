@@ -145,5 +145,3 @@
     (if (dry-run-p optimized)
         '|nil|
         optimized)))
-
-(eval (optimize (read #p"~/git/lamber/test.lmb")))
