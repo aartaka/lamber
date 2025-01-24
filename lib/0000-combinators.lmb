@@ -69,7 +69,7 @@ def Z fn f
 
 def Z2 fn f
   let inner = (fn (x) f (fn (y z) x x y z)) .
-  ω inner .
+  inner inner .
 
 ;; TODO Θ
 
