@@ -14,3 +14,20 @@ def words fn (string)
    else
      singleton string
 end
+
+def itoa fn (i)
+  local pluszero = (fn (x) + '0' x)
+  if (< i 10)
+  then singleton : pluszero i
+  else rcons (itoa : div i 10) (pluszero : mod i 10)
+end
+
+def atoi fn (string)
+  local %atoi = fn (r acc str)
+    local val = + (- (first str) '0') (* acc 10)
+    if (= 1 (length str))
+    then val
+    else r val : rest str
+  end
+  (Z2 %atoi) 0 string
+end
