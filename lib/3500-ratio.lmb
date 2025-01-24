@@ -10,8 +10,8 @@ alias numer numerator .
 alias denom denominator .
 
 def r+ fn (x y)
-  local denomx = denom x
-  local denomy = denom y
+  local denomx = denom x .
+  local denomy = denom y .
   ratio : + (* denomy : numer x) (* denomx : numer y)
         : * denomx denomy
 end
