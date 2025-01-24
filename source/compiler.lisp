@@ -126,7 +126,7 @@
 
 (define-generic dry-run-p ((tree t))
   "Check whether we're running in dry run mode."
-  t)
+  nil)
 
 (defmethod dry-run-p ((tree cons))
   (let ((head (first tree)))
