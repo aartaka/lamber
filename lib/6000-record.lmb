@@ -8,6 +8,9 @@ def record5 fn (a b c d e x) x a b c d e .
 def record6 fn (a b c d e f x) x a b c d e f .
 def record7 fn (a b c d e f g x) x a b c d e f g .
 
+alias tuple record2 .
+alias triple record3 .
+
 def record1.0 fn (r) r identity .
 def record2.0 fn (r) r (fn (a b) a) .
 def record2.1 fn (r) r (fn (a b) b) .
