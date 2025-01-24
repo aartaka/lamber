@@ -19,3 +19,5 @@ alias isNothing isnothing .
 
 def just fn (maybe default)
   maybe identity default .
+
+alias result just .
