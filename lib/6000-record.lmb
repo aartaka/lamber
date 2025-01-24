@@ -1,4 +1,5 @@
 ;; FIXME: Better (recursive?) implementation with arbitrary args?
+;; Maybe just use conses?
 def record1 fn (a x) x a .
 def record2 fn (a b x) cons .
 def record3 fn (a b c x) x a b c .
