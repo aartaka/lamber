@@ -140,3 +140,11 @@ def isodd fn n
 
 alias oddp isodd .
 alias odd? isodd .
+
+def gcd fn (a b)
+  local %gcd = fn (r x y)
+    if (iszero y)
+    then x
+    else r y : mod x y
+  end
+  (Z2 %gcd) a b .
