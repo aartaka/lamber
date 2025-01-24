@@ -67,6 +67,10 @@ def Z fn f
   let inner = fn (x) f (fn y : x x y) .
   inner inner .
 
+def Z2 fn f
+  let inner = (fn (x) f (fn (y z) x x y z)) .
+  ω inner .
+
 ;; TODO Θ
 
 def ι fn f
