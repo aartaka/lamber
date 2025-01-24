@@ -118,10 +118,10 @@ def log fn (num base)
 end
 
 def min fn (m n)
-  (lt m n) m n .
+  (leq m n) m n .
   
 def max fn (m n)
-  (lt m n) n m .
+  (leq m n) n m .
 
 def between fn (low x high)
   and (geq x low) (leq x high) .
