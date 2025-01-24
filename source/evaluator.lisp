@@ -26,6 +26,9 @@
           repeat thing
           do (setf acc (list 'f acc))
           finally (return `(lambda (f) (lambda (zero) ,acc)))))
+  (:method ((thing ratio))
+    (%lambda-ify
+     `(|cons| ,(numerator thing) ,(denominator thing))))
   (:method ((thing cons))
     (case (first thing)
       (let (destructuring-bind (let ((name value)) body)
