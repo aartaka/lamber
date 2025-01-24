@@ -87,8 +87,9 @@
         if (char= #\\ c)
           do (let ((next (read-char stream)))
                (setf c (get-escaped-char next)))
-        do (assert (char= #\' (read-char stream))
-                   () "Character literal can only be one char long")
+        do (let ((next (read-char stream)))
+             (assert (char= #\' next)
+                     () "Character literal can only be one char long (around '~c~c)" c next))
         do (return c)))
 
 (defun read-string (stream char)
