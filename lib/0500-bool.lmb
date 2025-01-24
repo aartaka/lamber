@@ -13,6 +13,7 @@ alias ⫟ not .
 alias ~ not .
 alias false? not .
 alias negation not .
+alias not! not .
 
 def and fn (p q)
   p q p .
@@ -20,6 +21,7 @@ def and fn (p q)
 alias ∧ and .
 alias & and .
 alias conjunction and .
+alias and? and .
 
 def or fn (p q)
   p p q .
@@ -27,6 +29,7 @@ def or fn (p q)
 alias | or .
 alias ∨ or .
 alias disjunction or .
+alias or? or .
 
 def xor fn (p q)
   p (not q) q .
@@ -34,18 +37,21 @@ def xor fn (p q)
 alias ⊻ xor .
 alias ⊕ xor .
 alias ⩛ xor .
+alias xor? xor .
 
 def nand fn (p q)
   not : and p q .
 
 alias ⊼ nand .
 alias ↑ nand .
+alias nand? nand .
 
 def nor fn (p q)
   not : or p q .
 
 alias ⊽ nor .
 alias ↓ nor .
+alias nor? nor .
 
 def xnor fn (p q)
   not : xor p q .
@@ -57,6 +63,7 @@ alias ⇔ xnor .
 alias ⬄ xnor .
 alias ⟺ xnor .
 alias bool= xnor .
+alias xnor? xnor .
 
 def impl fn (p q)
   or (not p) q .
@@ -65,6 +72,7 @@ alias ⇒ impl .
 alias Ɔ impl .
 alias ⟹ impl .
 alias ⊃ impl .
+alias implies impl .
 
 def mux fn (p q selector)
   or (and p (not selector)) (and q selector) .
