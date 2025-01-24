@@ -63,7 +63,7 @@ alias isOctDigit isoctdigit .
 def ishexdigit fn (c)
   or (isdigit c)
      (or (between 'A' 'F' c)
-         (between 'a  'f' c)) .
+         (between 'a' 'f' c)) .
 
 alias isHexDigit ishexdigit .
 
