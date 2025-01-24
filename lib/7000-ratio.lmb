@@ -1,0 +1,21 @@
+def ratio fn (numer denom)
+  local divisor = gcd numer denom .
+  cons (div numer divisor)
+       (div denom divisor)
+end
+def numerator car .
+def denominator cdr .
+
+alias numer numerator .
+alias denom denominator .
+
+def r+ fn (x y)
+  local denomx = denom x
+  local denomy = denom y
+  ratio : + (* denomy : numer x) (* denomx : numer y)
+        : * denomx denomy
+end
+
+def r* fn (x y)
+  ratio (* (numer x) (numer y))
+        (* (denom x) (denom y)) .
