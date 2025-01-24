@@ -24,18 +24,18 @@ alias isSpace isspace .
 
 ;; Only English/Latin ASCII letters
 def islower fn (c)
-  or (between 97 c 122)
-     (or (between 223 c 246)
-         (between 248 c 255)) .
+  or (between 97 122 c)
+     (or (between 223 246 c)
+         (between 248 255 c)) .
 
 alias isLower islower .
 alias lowercasep islower .
 alias lowercase? islower .
 
 def isupper fn (c)
-  or (between 65 c 90)
-     (or (between 192 c 214)
-         (between 216 c 222)) .
+  or (between 65 90 c)
+     (or (between 192 214 c)
+         (between 216 222 c)) .
 
 alias isUpper isupper .
 alias uppercasep isupper .
@@ -49,21 +49,21 @@ alias alphap isalpha .
 alias isAlpha isalpha .
 
 def isdigit fn (c)
-  between '0' c '9' .
+  between '0' '9' c .
 
 alias isDigit isdigit .
 alias digitp isdigit .
 alias digit? isdigit .
 
 def isoctdigit fn (c)
-  between '0' c '7' .
+  between '0' '7' c .
 
 alias isOctDigit isoctdigit .
 
 def ishexdigit fn (c)
   or (isdigit c)
-     (or (between 'A' c 'F')
-         (between 'a' c 'f')) .
+     (or (between 'A' 'F' c)
+         (between 'a  'f' c)) .
 
 alias isHexDigit ishexdigit .
 
@@ -98,36 +98,36 @@ def isasciilower fn (c)
       : isascii c .
 
 def tolower fn (c)
-   + c (if (between 'A' c 'Z')
+   + c (if (between 'A' 'Z' c)
          then - 'a' 'A'
-        else if (between 'À' c 'Þ')
+        else if (between 'À' 'Þ' c)
          then - 'à' 'À'
         else 0)
 end
 
 def toupper fn (c)
-   - c (if (between 'a' c 'z')
+   - c (if (between 'a' 'z' c)
          then - 'a' 'A'
-        else if (between 'à' c 'þ')
+        else if (between 'à' 'þ' c)
          then - 'à' 'À'
         else 0)
 end
 
 def digittoint fn (c)
-  if (between '0' c '9')
+  if (between '0' '9' c)
    then - c 48
-  else if (between 'A' c 'F')
+  else if (between 'A' 'F' c)
    then - c 55
-  else if (between 'a' c 'f')
+  else if (between 'a' 'f' c)
    then - c 87
   else
    0
 end
 
 def inttodigit fn (i)
-  if (between 0 i 9)
+  if (between 0 9 i)
    then + i 48
-  else if (between 10 i 15)
+  else if (between 10 15 i)
    then + i 55
   else
    0

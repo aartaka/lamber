@@ -123,10 +123,10 @@ def min fn (m n)
 def max fn (m n)
   (leq m n) n m .
 
-def between fn (low x high)
+def between fn (low high x)
   and (geq x low) (leq x high) .
 
-def clamp fn (low x high)
+def clamp fn (low high x)
   max low : min x high .
 
 def iseven fn n
