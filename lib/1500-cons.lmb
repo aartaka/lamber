@@ -4,7 +4,7 @@ def pair fn (head tail)
   cons head tail .
 
 def car fn (pair)
-  pair true .
+  pair (fn (h t x) h) nil .
 
 alias head car .
 
