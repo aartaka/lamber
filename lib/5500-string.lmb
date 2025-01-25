@@ -34,3 +34,6 @@ end
 
 def rtoa fn (r)
   intercalate "/" [(itoa : numer r) (itoa : denom r)] .
+
+def btoa fn (b)
+  if b then "true" else "false" .
