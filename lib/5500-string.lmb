@@ -31,3 +31,6 @@ def atoi fn (string)
   end
   (Z2 %atoi) 0 string
 end
+
+def rtoa fn (r)
+  intercalate "/" [(itoa : numer r) (itoa : denom r)] .
