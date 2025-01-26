@@ -118,7 +118,7 @@
           (when (find name path)
             (warn "Function ~a is redefined/shadowed to another value near ~a"
                   name (car path)))
-          `(,let ((,name ,(warn-on-shadowing value (cons name path))))
+          `(,let ((,name ,value))
              ,(warn-on-shadowing body (cons name path))))
         (mapcar (lambda (subtree)
                   (warn-on-shadowing subtree path))
