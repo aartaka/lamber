@@ -60,15 +60,15 @@ def ω fn a
 ;; TODO Ω
 
 def Y fn g
-  let inner = fn (x) g x x .
+  local inner = fn (x) g x x .
   inner inner .
 
 def Z fn f
-  let inner = fn (x) f (fn y : x x y) .
+  local inner = fn (x) f (fn y : x x y) .
   inner inner .
 
 def Z2 fn f
-  let inner = (fn (x) f (fn (y z) x x y z)) .
+  local inner = (fn (x) f (fn (y z) x x y z)) .
   inner inner .
 
 ;; TODO Θ
