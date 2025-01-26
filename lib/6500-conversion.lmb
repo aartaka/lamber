@@ -23,3 +23,6 @@ def rtos fn (r)
 
 def btos fn (b)
   if b then "true" else "false" .
+
+def ltos fn (inner list)
+  rcons ']' : cons '[' : intercalate ", " : map inner list .
