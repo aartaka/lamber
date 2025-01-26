@@ -15,8 +15,8 @@ end
 def concat fn (a b)
   foldr cons b a .
 
-def rcons fn (a b)
-  concat a : cons b nil .
+def rcons fn (last list)
+  concat list : cons last nil .
 
 def concatmap fn (f list)
   foldr concat nil : map f list .
@@ -106,7 +106,7 @@ def butlast fn (list)
 end
 
 def rotatel fn (list)
-    rcons (cdr list) (car list) .
+    rcons (car list) (cdr list) .
 
 def rotater fn (list)
     cons (last list) (butlast list) .

@@ -15,7 +15,7 @@ def itos fn (i)
   local pluszero = (fn (x) + '0' x)
   if (< i 10)
   then singleton : pluszero i
-  else rcons (itos : div i 10) (pluszero : mod i 10)
+  else rcons (pluszero : mod i 10) (itos : div i 10)
 end
 
 def rtos fn (r)
