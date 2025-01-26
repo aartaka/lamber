@@ -1,0 +1,25 @@
+def stoi fn (string)
+  local %stoi = fn (r acc str)
+    local val = + (- (first str) '0') (* acc 10)
+    if (= 1 (length str))
+    then val
+    else r val : rest str
+  end
+  (Z2 %stoi) 0 string
+end
+
+alias parseInt stoi .
+
+;; To string
+def itos fn (i)
+  local pluszero = (fn (x) + '0' x)
+  if (< i 10)
+  then singleton : pluszero i
+  else rcons (itos : div i 10) (pluszero : mod i 10)
+end
+
+def rtos fn (r)
+  intercalate "/" [(itos : numer r) (itos : denom r)] .
+
+def btos fn (b)
+  if b then "true" else "false" .

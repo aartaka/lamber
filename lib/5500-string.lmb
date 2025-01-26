@@ -1,39 +1,14 @@
-def lines fn (string)
-  let not-newline = (complement (char= '\n')) .
-  if some (char= '\n') string
-    then cons : takewhile not-newline string
-              : lines : cdr : dropwhile not-newline string
+def tokens fn (split-pred string)
+  local reverse = complement split-pred .
+  if (some split-pred string)
+    then cons : takewhile reverse string
+              : tokens split-pred : cdr : dropwhile reverse string
    else
      singleton string
 end
+
+def lines fn (string)
+  tokens (char= '\n') string .
 
 def words fn (string)
-  if some isspace string
-    then cons : takewhile (complement isspace) string
-              : words : dropwhile isspace : dropwhile (complement isspace) string
-   else
-     singleton string
-end
-
-def itoa fn (i)
-  local pluszero = (fn (x) + '0' x)
-  if (< i 10)
-  then singleton : pluszero i
-  else rcons (itoa : div i 10) (pluszero : mod i 10)
-end
-
-def atoi fn (string)
-  local %atoi = fn (r acc str)
-    local val = + (- (first str) '0') (* acc 10)
-    if (= 1 (length str))
-    then val
-    else r val : rest str
-  end
-  (Z2 %atoi) 0 string
-end
-
-def rtoa fn (r)
-  intercalate "/" [(itoa : numer r) (itoa : denom r)] .
-
-def btoa fn (b)
-  if b then "true" else "false" .
+  tokens isspace string .
