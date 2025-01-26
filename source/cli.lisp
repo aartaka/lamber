@@ -30,4 +30,4 @@
     (error (e)
       (let ((*print-case* :downcase)
             (*package* (find-package :lamber)))
-        (format t "~&~a Aborting!~&" e)))))
+        (format t "~&~a~&Aborting!~&" e)))))
