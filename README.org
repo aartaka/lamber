@@ -38,7 +38,18 @@ Step by step:
 
 * Values
 There's a number of guiding principles Lamber is built around:
-- Minimalism :: If something is not absolutely necessary, it's not going to be there. All there is in the language should fit into one moderately overwhelmed programmer's head.
+- Minimalism :: If something is not absolutely necessary, it's not going to be there.
+  - Cognitive :: All there is in the language should fit into one moderately overwhelmed programmer's head.
+  - Footprint :: Implementation should be small enough.
+  - Syntactical :: There shouldn't be more than ten pieces of syntax in the language.
+    - As of the moment of writing, there are seven:
+      - ~let~ / ~def~ etc. variable definition.
+      - ~if~ branching.
+      - ~function~-s.
+      - Literal values, like booleans, numbers, and strings.
+      - Function calls.
+      - Colons.
+      - Periods.
 - Readability :: Lambda Calculus is scary. Lua is not. Lamber tries to be somewhere in between the two, with the bias towards Lua.
 - Functional design :: Functional programming won, and you have to live with it. Make your functions composable and higher-order. And no side-effects, thank you!
 
