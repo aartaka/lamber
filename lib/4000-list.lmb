@@ -205,6 +205,8 @@ alias interpose intersperce .
 def intercalate fn (list lists)
   foldr concat nil : intersperce list lists .
 
+alias join intercalate .
+
 def index fn (pred list)
   local %index = fn (h t idx)
     if (pred h)
