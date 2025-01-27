@@ -35,6 +35,42 @@
                ,(tree-shake body))))
       (mapcar #'tree-shake tree)))
 
+(define-generic de-alias ((tree t) &optional (aliases '()))
+  "Warn about all the unbound variables."
+  (declare (ignorable aliases))
+  tree)
+
+(defmethod de-alias ((tree symbol) &optional (aliases '()))
+  (loop with sym = tree
+        for alias = (cdr (assoc sym aliases))
+        until (null alias)
+        do (setf sym alias)
+        finally (return sym)))
+
+(defmethod de-alias ((tree cons) &optional (aliases '()))
+  (case (first tree)
+    (let (destructuring-bind (let ((name value)) body)
+             tree
+           (declare (ignorable let))
+           (cond
+             ((symbolp value)
+              (de-alias body `((,name . ,value) ,@aliases)))
+             ((assoc name aliases)
+              `(,let ((,name ,value))
+                 ,(de-alias body (remove name aliases :key #'car))))
+             (t `(,let ((,name ,(de-alias value aliases)))
+                   ,(de-alias body aliases))))))
+    (lambda (destructuring-bind (lambda (&rest args) body)
+                tree
+              (declare (ignorable lambda))
+              `(lambda (,@args)
+                 ,(de-alias body (remove-if (lambda (alias)
+                                              (member alias args))
+                                            aliases :key #'car)))))
+    (t (mapcar (lambda (subtree)
+                 (de-alias subtree aliases))
+               tree))))
+
 (define-generic warn-on-unbound ((tree t) &optional (enclosing-function "toplevel") path)
   "Warn about all the unbound variables."
   (declare (ignorable tree enclosing-function path))
@@ -141,7 +177,8 @@
                       (warn-on-shadowing
                        (warn-on-suspicious-applications
                         (warn-on-unbound
-                         (plug-dummy-for-lib tree)))))))))
+                         (de-alias
+                          (plug-dummy-for-lib tree))))))))))
     (if (dry-run-p optimized)
         '|nil|
         optimized)))
