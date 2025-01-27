@@ -9,13 +9,17 @@ def denominator cdr .
 alias numer numerator .
 alias denom denominator .
 
-def r+ fn (x y)
+def radd fn (x y)
   local denomx = denom x .
   local denomy = denom y .
   ratio : + (* denomy : numer x) (* denomx : numer y)
         : * denomx denomy
 end
 
-def r* fn (x y)
+alias r+ radd .
+
+def rmul fn (x y)
   ratio (* (numer x) (numer y))
         (* (denom x) (denom y)) .
+
+alias r* rmul .
