@@ -10,6 +10,14 @@ end
 
 alias parseInt stoi .
 
+def stor fn (string)
+  (splitwhen (char= '/') string)
+  ;; Beautiful or cursed? You tell me!
+  (fn (h t)
+   ratio : stoi h
+         : stoi : cdr : t)
+end
+
 ;; To string
 def itos fn (i)
   local tochar = (+ '0')
