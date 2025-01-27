@@ -12,10 +12,10 @@ alias parseInt stoi .
 
 ;; To string
 def itos fn (i)
-  local pluszero = (fn (x) + '0' x)
+  local tochar = (+ '0')
   if (< i 10)
-  then singleton : pluszero i
-  else rcons (pluszero : mod i 10) (itos : div i 10)
+  then singleton : tochar i
+  else rcons (tochar : mod i 10) (itos : div i 10)
 end
 
 def rtos fn (r)
