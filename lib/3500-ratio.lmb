@@ -23,3 +23,13 @@ def rmul fn (x y)
         (* (denom x) (denom y)) .
 
 alias r* rmul .
+
+def reciprocal fn (r)
+  ratio (denom r) (numer r) .
+
+alias rinvert reciprocal .
+
+def rdiv fn (x y)
+  rmul x : reciprocal y .
+
+alias r/ rdiv .
