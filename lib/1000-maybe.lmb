@@ -7,15 +7,16 @@ def maybe fn (x just none)
 
 alias option maybe .
 
-def isjust fn (maybe)
+def isnothing fn (maybe)
   maybe (fn _ false) true .
+
+alias isNothing isnothing .
+
+def isjust = complement isnothing .
 
 alias isJust isjust .
 alias just? isjust .
 alias justp isjust .
-
-def isnothing = complement isjust .
-alias isNothing isnothing .
 
 def just fn (maybe default)
   maybe identity default .
