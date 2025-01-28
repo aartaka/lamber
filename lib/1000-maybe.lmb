@@ -18,7 +18,7 @@ alias isJust isjust .
 alias just? isjust .
 alias justp isjust .
 
-def just fn (maybe default)
+def just fn (default maybe)
   maybe identity default .
 
 alias fromMaybe just .
