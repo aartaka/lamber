@@ -23,7 +23,7 @@ Step by step:
   - So factorial returns either ~1~ or... wait, I need to explain some more.
 - Functions are prefix in Lamber, so ~= n 0~ means "n is equal to zero" and ~dec n~ means decreasing n.
 - There's no looping in Lamber, only recursion.
-  - Luckily, first-class functions and abundance of list processing functions in the standard library make explicit looping unnecessary in most cases.
+  - Luckily, first-class functions and abundance of list processing utilities in the standard library make explicit looping unnecessary in most cases.
 - There are several special syntax pieces, mostly stolen from [[https://srfi.schemers.org/srfi-119/][Wisp]]:
   - ~:~ colon to chain function calls. Lamber emphasizes composable functions that are easy to chain, as in ~* n : factorial : dec n~:
     - Decrease n.
@@ -63,5 +63,5 @@ git clone --recursive https://github.com/aartaka/lamber
 - Use the generated ~lamber~ as in
 #+begin_src sh
 ./lamber example/hello.lmb string
-# Hello, World!
+# Hello, world!
 #+end_src
