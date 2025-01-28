@@ -92,11 +92,11 @@ alias >= geq .
 
 ;; Obscure one listed by John Tromp with commentary:
 ;; "Discovered by Bertram Felgenhauer (int-e)"
-def div fn (n m)
+def div fn (dividend divisor)
   local F = fn (m f t)
     m T' (fn (c) f : c t) id .
   fn (f x)
-    n T' (K x) (n (F m f) x) .
+    dividend T' (K x) (dividend (F divisor f) x) .
 
 alias / div .
 alias quot div .
