@@ -138,7 +138,7 @@
   (let ((*readtable* (copy-readtable *readtable*))
         (*package* (find-package :lamber)))
     (setf (readtable-case *readtable*) :preserve)
-    (set-macro-character #\' #'read-quoted-char)
+    (set-macro-character #\' #'read-quoted-char t)
     (set-macro-character #\" #'read-string)
     (set-macro-character #\[ #'read-square-bracket nil)
     (set-macro-character #\: #'read-colon)
