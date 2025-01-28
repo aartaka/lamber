@@ -108,6 +108,21 @@ def mod fn (dividend divisor)
 alias % mod .
 alias rem mod .
 
+;; Copied from John Tromp's divides.lam
+def divides fn (dividend divisor)
+  if (= 1 divisor)
+   then true
+  else
+   dividend (fn (l) l true)
+   (dividend
+    (fn (r)
+     divisor
+     (fn (m b z) z (m false) b)
+     (constantly r) true)
+    divisor)
+   false
+end
+
 def log fn (num base)
   local %log = fn x
     when (eq x base)
@@ -148,17 +163,3 @@ def gcd fn (a b)
     else r y : mod x y
   end
   (Z2 %gcd) a b .
-
-def divides fn (dividend divisor)
-  if (= 1 divisor)
-   then true
-  else
-   dividend (fn (l) l true)
-   (dividend
-    (fn (r)
-     divisor
-     (fn (m b z) z (m false) b)
-     (constantly r) true)
-    divisor)
-   false
-end
