@@ -60,7 +60,7 @@ def notevery fn (pred list)
 def find fn (pred list)
   local %find = fn (e a)
     if (pred e)
-    then e
+    then (maybe e)
     else a
   end
   foldr %find nil list
@@ -213,7 +213,7 @@ def index fn (pred list)
     then idx
     else t %index : succ idx
   end
-  ;; FIXME: Is there a better default value?
-  ;; MAXINT something?
-  list %index 0
+  if (some pred list)
+   then maybe : list %index 0
+  else nil
 end
