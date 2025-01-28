@@ -90,14 +90,15 @@ def geq fn (m n)
 alias ≥ geq .
 alias >= geq .
 
-def div fn (dividend divisor)
-  local %div = fn quot
-    when lt quot divisor
-    then 0
-    else : succ : %div : sub quot divisor
-  end
-  %div dividend
-end
+;; Obscure one listed by John Tromp with commentary:
+;; "Discovered by Bertram Felgenhauer (int-e)"
+def div fn (n m)
+  ;; It's T combinator, technically.
+  local 1tuple = (fn (x f) f x)
+  local F = fn (m f t)
+    m 1tuple (fn (c) f : c t) id .
+  fn (f x)
+    n 1tuple (K x) (n (F m f) x) .
 
 alias / div .
 alias quot div .
