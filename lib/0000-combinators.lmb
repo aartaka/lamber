@@ -46,7 +46,8 @@ alias bi N .
 def O fn (a b)
   b : a b .
 
-def T fn (a b)
+;; Named with quote because T is a special symbol in Lisp.
+def T' fn (a b)
   b a .
 
 def W fn (a b)
