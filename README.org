@@ -62,6 +62,8 @@ git clone --recursive https://github.com/aartaka/lamber
 - And compile the ~lamber~ executable with ~make~
 - Use the generated ~lamber~ as in
 #+begin_src sh
-./lamber example/hello.lmb string
-# Hello, world!
+  ./lamber example/hello.lmb string
+  # Hello, world!
+  ./lamber example/factorial.lmb int
+  # 120
 #+end_src
