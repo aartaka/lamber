@@ -20,6 +20,14 @@ def readc fn (dummy)
 
 alias getChar readc .
 
+def readln fn (dummy)
+  local char = readc dummy .
+  if (char= '\n' char)
+   then nil
+  else cons char : readln dummy .
+
+alias getLine readln .
+
 def readf fn (name)
   #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) name .
 
