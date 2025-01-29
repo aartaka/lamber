@@ -8,3 +8,18 @@ def writes fn (str)
 
 def writesln fn (str)
   writes : rcons '\n' str  .
+
+def readf fn (name)
+  #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) name .
+
+alias readFile readf .
+
+def writef fn (name str)
+  #.(LAMBDA (NAME)
+     (LAMBDA (STR)
+      (LAMBER::EVAL
+       (UIOP:WITH-OUTPUT-FILE (F (LAMBER::TOSTRING NAME)
+                              #.(INTERN "IF-EXISTS" "KEYWORD") (INTERN "SUPERSEDE" "KEYWORD"))
+        (WRITE-STRING (LAMBER::TOSTRING STR) F))))) name str .
+
+def writeFile writef .
