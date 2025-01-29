@@ -26,7 +26,7 @@ def writef fn (name str)
 def writeFile writef .
 
 def readc fn (dummy)
-  #.(LAMBDA (_) (LAMBER::EVAL (READ-CHAR))) dummy
+  #.(LAMBDA (_) (DECLARE (IGNORE _)) (LAMBER::EVAL (READ-CHAR))) dummy
 
 alias getChar readc .
 
