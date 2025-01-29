@@ -18,6 +18,14 @@ def stor fn (string)
          : stoi : cdr : t)
 end
 
+def rtoi fn (ratio)
+  div (numer ratio) (denom ratio) .
+
+alias rfloor rtoi .
+
+def itor fn (int)
+  ratio int 1 .
+
 ;; To string
 def itos fn (i)
   local tochar = (+ '0')
