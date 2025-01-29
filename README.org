@@ -29,7 +29,7 @@ Step by step:
     - Decrease n.
     - Call ~factorial~ on it.
     - And multiply the result by ~n~.
-  - ~.~ period is a shortcut for ~end~ in Lua and the kind. You can do explicit ~end~ too, but it's not as pretty:
+  - ~.~ period is a shortcut for ~end~ (like in Lua and the kind.) You can do explicit ~end~ too, but it's not as pretty:
 #+begin_src lua
    else
     ,* n : factorial : dec n
