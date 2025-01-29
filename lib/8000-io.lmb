@@ -1,0 +1,11 @@
+def writec fn (c)
+  #.(LAMBDA (x) (LAMBER::EVAL (PRINC (LAMBER::TOCHAR x)))) c .
+
+;; Leaking abstraction: map is a right fold, so we need to reverse things.
+;; And then reverse them back to string when printed.
+def writes fn (str)
+  reverse : map writec str .
+
+def writesln fn (str)
+  local andnewline = rcons '\n' str .
+  writes andnewline .
