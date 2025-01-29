@@ -51,7 +51,7 @@ There's a number of guiding principles Lamber is built around:
       - Colons.
       - Periods.
 - Readability :: Lambda Calculus is scary. Lua is not. Lamber tries to be somewhere in between the two, with the bias towards Lua.
-- Functional design :: Functional programming won, and you have to live with it. Make your functions composable and higher-order. And no side-effects, thank you!
+- Functional design :: Functional programming won, and you have to live with it. Make your functions composable and higher-order. And no side-effects (well, there's [[./lib/8000-io.lmb]], but hush!)
 
 * Installation & Getting Started
 - Clone the repo:
@@ -62,7 +62,7 @@ git clone --recursive https://github.com/aartaka/lamber
 - And compile the ~lamber~ executable with ~make~
 - Use the generated ~lamber~ as in
 #+begin_src sh
-  ./lamber example/hello.lmb string
+  ./lamber example/hello.lmb
   # Hello, world!
   ./lamber example/factorial.lmb int
   # 120
