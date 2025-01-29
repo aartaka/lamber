@@ -15,6 +15,11 @@ def writesln fn (str)
 
 alias putStrLn writesln .
 
+def readc fn (dummy)
+  #.(LAMBDA (_) (LAMBER::EVAL (READ-CHAR))) dummy
+
+alias getChar readc .
+
 def readf fn (name)
   #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) name .
 
