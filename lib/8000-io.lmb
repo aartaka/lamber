@@ -15,6 +15,16 @@ def writesln fn (str)
 
 alias putStrLn writesln .
 
+def writef fn (name str)
+  #.(LAMBDA (NAME)
+     (LAMBDA (STR)
+      (LAMBER::EVAL
+       (UIOP:WITH-OUTPUT-FILE (F (LAMBER::TOSTRING NAME)
+                              #.(INTERN "IF-EXISTS" "KEYWORD") (INTERN "SUPERSEDE" "KEYWORD"))
+        (WRITE-STRING (LAMBER::TOSTRING STR) F))))) name str .
+
+def writeFile writef .
+
 def readc fn (dummy)
   #.(LAMBDA (_) (LAMBER::EVAL (READ-CHAR))) dummy
 
@@ -32,13 +42,3 @@ def readf fn (name)
   #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) name .
 
 alias readFile readf .
-
-def writef fn (name str)
-  #.(LAMBDA (NAME)
-     (LAMBDA (STR)
-      (LAMBER::EVAL
-       (UIOP:WITH-OUTPUT-FILE (F (LAMBER::TOSTRING NAME)
-                              #.(INTERN "IF-EXISTS" "KEYWORD") (INTERN "SUPERSEDE" "KEYWORD"))
-        (WRITE-STRING (LAMBER::TOSTRING STR) F))))) name str .
-
-def writeFile writef .
