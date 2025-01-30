@@ -41,6 +41,7 @@ There's a number of guiding principles Lamber is built around:
 - Minimalism :: If something is not absolutely necessary, it's not going to be there.
   - Cognitive :: All there is in the language should fit into one moderately overwhelmed programmer's head.
   - Footprint :: Implementation should be small enough.
+  - Build :: All the libraries and apps are provided as files on CLI or in ~LAMBER_PATH~ and sorted lexicographically. Want to load your lib earlier? Just rename the file!
   - Syntactical :: There shouldn't be more than ten pieces of syntax in the language.
     - As of the moment of writing, there are seven:
       - ~let~ / ~def~ etc. variable definition.
