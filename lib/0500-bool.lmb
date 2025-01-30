@@ -1,9 +1,7 @@
-alias True true .
 alias ⊤ true .
 alias constantly true .
 
 alias ⊥ false .
-alias False false .
 
 def not fn p
   p false true .
