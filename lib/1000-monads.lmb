@@ -31,11 +31,11 @@ alias result just .
 ;; Either implementation from
 ;; https://text.marvinborner.de/2024-11-18-00.html#either
 
-def left fn (v l r) l v .
-def right fn (v l r) r v .
+def left fn (value lft rght) lft value .
+def right fn (value lft rght) rght value .
 
-def either fn (lfn rfn lr)
-  lr lfn rfn .
+def either fn (leftfn rightfn ethr)
+  ethr leftfn rightfn .
 
 def isleft fn (either)
   either (fn _ true) (fn _ false) .
