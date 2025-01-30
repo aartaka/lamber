@@ -24,3 +24,38 @@ def just fn (default maybe)
 
 alias fromMaybe just .
 alias result just .
+
+;; Either implementation from
+;; https://text.marvinborner.de/2024-11-18-00.html#either
+
+def left fn (v l r) l v .
+def right fn (v l r) r v .
+
+def either fn (lfn rfn lr)
+  lr lfn rfn .
+
+def isleft fn (either)
+  either (fn _ true) (fn _ false) .
+
+alias isLeft isleft .
+alias left? isleft .
+alias leftp isleft .
+
+def isright fn (either)
+  either (fn _ false) (fn _ true) .
+
+alias isRight isright .
+alias right? isright .
+alias rightp isright .
+
+def getleft fn (either)
+  either identity (constantly nil) .
+
+alias getLeft getleft .
+alias fromLeft getleft .
+
+def getright fn (either)
+  either (constantly nil) identity .
+
+alias getRight getright .
+alias fromRight getright .
