@@ -6,6 +6,9 @@ alias nothing nil .
 def maybe fn (x just none)
   just x .
 
+alias box maybe .
+alias option maybe .
+
 alias option maybe .
 
 def isnothing fn (maybe)
