@@ -11,6 +11,14 @@ def record7 fn (a b c d e f g x) x a b c d e f g .
 alias tuple record2 .
 alias triple record3 .
 
+def record1tolist fn (r) r (fn (a) [a]) .
+def record2tolist fn (r) r (fn (a b) [a b]) .
+def record3tolist fn (r) r (fn (a b c) [a b c]) .
+def record4tolist fn (r) r (fn (a b c d) [a b c d]) .
+def record5tolist fn (r) r (fn (a b c d e) [a b c d e]) .
+def record6tolist fn (r) r (fn (a b c d e f) [a b c d e f]) .
+def record7tolist fn (r) r (fn (a b c d e f g) [a b c d e f g]) .
+
 def record1.0 fn (r) r identity .
 def record2.0 fn (r) r (fn (a b) a) .
 def record2.1 fn (r) r (fn (a b) b) .
