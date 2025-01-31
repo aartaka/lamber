@@ -40,12 +40,6 @@ Raises warnings if there are type mismatches."
   (declare (ignorable defined-types))
   (values tree (cdr (assoc tree sym-types)) sym-types))
 
-(defun merge-sym-types (types1 types2)
-  "Merge the TYPES1 and TYPES2 type alists.
-Warn if there are mismatches."
-  ;; TODO
-  )
-
 (defun infer-let (tree &optional sym-types defined-types)
   (destructuring-bind (let ((name value)) body)
       tree
@@ -74,20 +68,18 @@ Warn if there are mismatches."
            (multiple-value-bind (body-expr body-type final-sym-types)
                (type-infer body sym-types defined-types)
              (values `(let ((,name ,constructor)) ,body-expr)
-                     body-type
-                     (merge-sym-types sym-types final-sym-types))))))
+                     body-type final-sym-types)))))
       ;; TODO: Function types based on use of args in body, and
       ;; removal of arg types when function types is inferred.
       (t (multiple-value-bind (expr type new-sym-types)
              (type-infer value sym-types defined-types)
-           (let ((merged-types (merge-sym-types `((,name . ,type))
-                                                (merge-sym-types sym-types new-sym-types))))
-             (multiple-value-bind (body body-type new-new-sym-types)
-                 (type-infer body merged-types defined-types)
+           (let ((augmented-types (cons `(,name . ,type) new-sym-types)))
+             (multiple-value-bind (body body-type new-sym-types)
+                 (type-infer body augmented-types defined-types)
                (values `(let ((,name ,expr))
                           ,body)
                        body-type
-                       (merge-sym-types merged-types new-new-sym-types)))))))))
+                       new-sym-types))))))))
 
 (defun infer-lambda (tree &optional sym-types defined-types)
   (let ((old-sym-types (copy-tree sym-types)))
@@ -133,7 +125,7 @@ Warn if there are mismatches."
            (type-infer (second tree) sym-types defined-types)
          (unless (types-compatible-p head type)
            (warn "Types ~a and and ~a are not compatible for ~a" head type tree))
-         (values expr type (merge-sym-types syms sym-types))))
+         (values expr type syms)))
       ((and (assoc head defined-types)
             (plusp (cdr (assoc head defined-types))))
        (unless (second tree)
@@ -143,7 +135,7 @@ Warn if there are mismatches."
                = (multiple-value-list (type-infer sub))
              collect type into types
              collect expr into exprs
-             do (setf sym-types (merge-sym-types sym-types syms))
+             do (setf sym-types (append syms sym-types))
              finally (values `(,head ,@exprs) `(,head ,@types) sym-types)))
       ;; Means it's a function, right?
       ((symbolp head)
