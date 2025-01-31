@@ -171,15 +171,18 @@
         nil)))
 
 (defun optimize (tree)
-  (let ((optimized
-         (tree-shake
-          (tree-shake
-           (tree-shake
-            (warn-on-shadowing
-             (warn-on-suspicious-applications
-              (warn-on-unbound
-               (de-alias
-                (plug-dummy-for-lib tree))))))))))
-    (if (dry-run-p optimized)
-        '|nil|
-        optimized)))
+  (multiple-value-bind (expr return-type all-types)
+      (type-infer
+       (tree-shake
+        (de-alias
+         (plug-dummy-for-lib tree))))
+    (let ((optimized
+            (tree-shake
+             (tree-shake
+              (tree-shake
+               (warn-on-shadowing
+                (warn-on-suspicious-applications
+                 (warn-on-unbound expr))))))))
+      (if (dry-run-p optimized)
+          '|nil|
+          (values optimized return-type)))))

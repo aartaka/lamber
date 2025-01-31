@@ -21,6 +21,7 @@
                 ((:file "package")
                  (:file "utils")
                  (:file "reader")
+                 (:file "inferrer")
                  (:file "compiler")
                  (:file "evaluator")
                  (:file "printer")

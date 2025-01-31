@@ -58,6 +58,16 @@
             `(lambda (,@(uiop:ensure-list args))
                ,body)
             next))))
+      ((memqual-string (first list) '("type" "constructor"))
+       (if (eq '|end| (second list))
+           (values 'type (nthcdr 2 list))
+           (let ((args (second list)))
+             (multiple-value-bind (body next)
+                 (%read (nthcdr 2 list))
+               (values
+                `(type (,@(uiop:ensure-list args))
+                       ,body)
+                next)))))
       (t
        (loop for elem in list
              until (ignore-errors (memqual-string elem '("let" "def" "define" "local" "var" "alias" "if" "then" "else" "end" ".")))
