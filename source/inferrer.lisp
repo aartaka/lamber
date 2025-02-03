@@ -12,7 +12,7 @@ Return
 
 Looks up the types of symbols in SYM-TYPES whenever necessary.
 DEFINED-TYPES are types defined so far.
-NIL is always an always defined 'anything' type.
+NIL is an always defined 'anything' type.
 Raises warnings if there are type mismatches."
   (declare (ignorable defined-types))
   (values tree nil sym-types))
@@ -89,7 +89,7 @@ Raises warnings if there are type mismatches."
       (multiple-value-bind (body return-type new-sym-types)
           (type-infer body sym-types defined-types)
         (values
-         body
+         `(lambda (,@args) ,body)
          `(|fn| (,@(mapcar (lambda (arg)
                              (cdr (assoc arg new-sym-types)))
                            args))
@@ -103,6 +103,23 @@ Raises warnings if there are type mismatches."
       (and (listp type1)
            (listp type2)
            (every #'types-compatible-p type1 type2))))
+
+(defun merge-sym-types (types1 types2)
+  (flet ((assoc-ref (item alist)
+           (cdr (assoc item alist))))
+    (loop with types2 = (remove-if #'null types2 :key #'cdr)
+          for (sym . type) in types1
+          for type2 = (assoc-ref sym types2)
+          if (null type2)
+            collect (cons sym type) into types
+          else if (and (null type) type2)
+                 collect (assoc sym types2) into types
+          else if (and type2 (not (types-compatible-p type type2)))
+                 do (warn "Types ~a and ~a are incompatible for ~a" type type2 sym)
+          else do (error "Shouldn't be there")
+          finally (return (loop for pair in types2
+                                do (pushnew pair types :key #'car)
+                                finally (return types))))))
 
 (defmethod type-infer ((tree cons) &optional sym-types defined-types)
   (declare (ignorable defined-types))
@@ -140,23 +157,43 @@ Raises warnings if there are type mismatches."
       ;; Means it's a function, right?
       ((symbolp head)
        (let ((found-type (assoc head sym-types)))
-         (when found-type
-           (destructuring-bind (fn (&rest arg-types) return-type)
-               (cdr found-type)
-             (declare (ignorable fn))
-             (loop for arg-type in arg-types
-                   for i from 0 below (length (rest tree))
+         (cond
+           ((and found-type (consp (cdr found-type)) (eq '|fn| (cadr found-type)))
+            (destructuring-bind (fn (&rest arg-types) return-type)
+                (cdr found-type)
+              (declare (ignorable fn))
+              (loop for arg-type in arg-types
+                    for i from 0 below (length (rest tree))
+                    for (expr type syms)
+                      = (multiple-value-list (type-infer (elt (rest tree) i) sym-types defined-types))
+                    unless (types-compatible-p arg-type type)
+                      do (warn "Argument ~s to ~a has type mismatch: ~a vs. expected ~a"
+                               i head type arg-type)
+                    finally (return (values tree return-type syms)))))
+           (found-type
+            (values tree (cdr found-type) sym-types))
+           (t (values tree nil sym-types)))))
+      ((listp head)
+       (multiple-value-bind (head-expr head-type head-syms)
+           (type-infer head sym-types defined-types)
+         (declare (ignorable head-type))
+         (if (symbolp head-expr)
+             (type-infer (cons head-expr (rest tree)) head-syms defined-types)
+             (loop with args = (rest tree)
+                   for i from 0 below (length args)
                    for (expr type syms)
-                     = (multiple-value-list (type-infer (elt (rest tree) i)))
-                   unless (types-compatible-p arg-type type)
-                     do (warn "Argument ~s to ~a has type mismatch: ~a vs. expected ~a"
-                              i head type arg-type)
-                   finally (return (values tree return-type syms)))))))
+                     = (multiple-value-list (type-infer (elt args i) sym-types defined-types))
+                   collect expr into arg-exprs
+                   do (setf sym-types (merge-sym-types sym-types syms))
+                   finally (return (values (cons head-expr arg-exprs) nil sym-types))))))
       (t (error "Expression ~s is not parseable" tree)))))
 
 ;; (type-infer '(+ 1 "hello") '((+ . (|fn| (|int| |int|) |int|))) '((|int| . 0) (|char| . 0)))
 
-;; (type-infer (read "
-;; fn (augend addend)
-;;   int (fn (f x)
-;;     (int augend) f ((int addend) f x))") '() '((|int| . 0)))
+(type-infer (read "
+fn (augend addend)
+   int (fn (f x)
+    (int augend) f ((int addend) f x))") '() '((|int| . 0) (|string| . 0)))
+(LAMBDA (|augend| |addend|)
+  (LAMBDA (|f| |x|)
+    (|augend| |f| ((|int| |addend|) |f| |x|))))
