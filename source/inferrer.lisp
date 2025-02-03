@@ -46,8 +46,12 @@ Raises warnings if there are type mismatches."
     (declare (ignorable let))
     (cond
       ((eq 'type value)
-       (type-infer
-        body sym-types `((,name . 0) ,@defined-types)))
+       (multiple-value-bind (body-expr body-type final-sym-types)
+           (type-infer body sym-types `((,name . 0) ,defined-types))
+         (let ((val (gensym "val")))
+           (values `(let ((,name (lambda (,val) ,val)))
+                      ,body-expr)
+                   body-type final-sym-types))))
       ((and (consp value)
             (eq 'type (first value)))
        ;; What a spaghetti dish, yummy!
@@ -62,7 +66,7 @@ Raises warnings if there are type mismatches."
                   `((,name . (|fn| (,@dummies)
                                    (,name ,@dummies)))
                     ,@(mapcar #'(lambda (arg dummy)
-                                  `(,arg (|fn| ((,name ,@dummies)) ,dummy)))
+                                  `(,arg . (|fn| ((,name ,@dummies)) ,dummy)))
                               args dummies)
                     ,@sym-types)))
            (multiple-value-bind (body-expr body-type final-sym-types)
@@ -204,4 +208,4 @@ Raises warnings if there are type mismatches."
              ((symbolp head-expr)
               (type-infer (cons head-expr (mapcar #'car arg+type)) sym-types defined-types))
              (t (values (cons head-expr (mapcar #'car arg+type)) nil sym-types))))))
-      (t (error "Expression ~s is not parseable" tree)))))
+      (t (values tree nil sym-types)))))
