@@ -82,19 +82,18 @@ Raises warnings if there are type mismatches."
                        new-sym-types))))))))
 
 (defun infer-lambda (tree &optional sym-types defined-types)
-  (let ((old-sym-types (copy-tree sym-types)))
-    (destructuring-bind (lambda (&rest args) body)
-        tree
-      (declare (ignorable lambda))
-      (multiple-value-bind (body return-type new-sym-types)
-          (type-infer body sym-types defined-types)
-        (values
-         `(lambda (,@args) ,body)
-         `(|fn| (,@(mapcar (lambda (arg)
-                             (cdr (assoc arg new-sym-types)))
-                           args))
-                ,return-type)
-         old-sym-types)))))
+  (destructuring-bind (lambda (&rest args) body)
+      tree
+    (declare (ignorable lambda))
+    (multiple-value-bind (body return-type sym-types)
+        (type-infer body sym-types defined-types)
+      (values
+       `(lambda (,@args) ,body)
+       `(|fn| (,@(mapcar (lambda (arg)
+                           (cdr (assoc arg sym-types)))
+                         args))
+              ,return-type)
+       sym-types))))
 
 (defun types-compatible-p (type1 type2)
   (or (null type1)
@@ -116,13 +115,39 @@ Raises warnings if there are type mismatches."
                  collect (assoc sym types2) into types
           else if (and type2 (not (types-compatible-p type type2)))
                  do (warn "Types ~a and ~a are incompatible for ~a" type type2 sym)
-          else do (error "Shouldn't be there")
-          finally (return (loop for pair in types2
-                                do (pushnew pair types :key #'car)
-                                finally (return types))))))
+          else
+            collect (cons sym type) into types
+            finally (return (loop for pair in types2
+                                  do (pushnew pair types :key #'car)
+                                  finally (return types))))))
+
+(defun get-sym-types (args sym-types defined-types)
+  (loop for i from 0 below (length args)
+        for (expr type syms)
+          = (multiple-value-list (type-infer (elt args i) sym-types defined-types))
+        collect (cons expr type) into arg+type
+        do (setf sym-types (merge-sym-types sym-types syms))
+        finally (return (values arg+type sym-types))))
+
+(defun check-function-arg-types (tree type sym-types defined-types)
+  (destructuring-bind (fn (&rest arg-types) return-type)
+      type
+    (declare (ignorable fn))
+    (multiple-value-bind (arg+type arg-sym-types)
+        (get-sym-types (rest tree) sym-types defined-types)
+      (loop for (arg-expr . arg-type) in arg+type
+            for i below (length arg+type)
+            collect arg-expr into arg-exprs
+            unless (types-compatible-p arg-type (elt arg-types i))
+              do (warn "Argument ~s to ~a has type mismatch: ~a vs. expected ~a"
+                       i (first tree) arg-type (elt arg-types i))
+            finally (return (values (cons (first tree) arg-exprs)
+                                    return-type
+                                    (merge-sym-types sym-types arg-sym-types)))))))
 
 (defmethod type-infer ((tree cons) &optional sym-types defined-types)
   (declare (ignorable defined-types))
+  sym-types defined-types
   (let ((head (first tree)))
     (cond
       ((eq 'let head)
@@ -140,9 +165,11 @@ Raises warnings if there are type mismatches."
             (zerop (cdr (assoc head defined-types))))
        (multiple-value-bind (expr type syms)
            (type-infer (second tree) sym-types defined-types)
-         (unless (types-compatible-p head type)
-           (warn "Types ~a and and ~a are not compatible for ~a" head type tree))
-         (values expr type syms)))
+         (declare (ignorable type))
+         ;; ;; Useless for explicit type casts?
+         ;; (unless (types-compatible-p head type)
+         ;;   (warn "Types ~a and and ~a are not compatible for ~a" head type tree))
+         (values expr head syms)))
       ((and (assoc head defined-types)
             (plusp (cdr (assoc head defined-types))))
        (unless (second tree)
@@ -159,41 +186,22 @@ Raises warnings if there are type mismatches."
        (let ((found-type (assoc head sym-types)))
          (cond
            ((and found-type (consp (cdr found-type)) (eq '|fn| (cadr found-type)))
-            (destructuring-bind (fn (&rest arg-types) return-type)
-                (cdr found-type)
-              (declare (ignorable fn))
-              (loop for arg-type in arg-types
-                    for i from 0 below (length (rest tree))
-                    for (expr type syms)
-                      = (multiple-value-list (type-infer (elt (rest tree) i) sym-types defined-types))
-                    unless (types-compatible-p arg-type type)
-                      do (warn "Argument ~s to ~a has type mismatch: ~a vs. expected ~a"
-                               i head type arg-type)
-                    finally (return (values tree return-type syms)))))
-           (found-type
-            (values tree (cdr found-type) sym-types))
+            (check-function-arg-types tree (cdr found-type) sym-types defined-types))
            (t (values tree nil sym-types)))))
       ((listp head)
        (multiple-value-bind (head-expr head-type head-syms)
            (type-infer head sym-types defined-types)
          (declare (ignorable head-type))
-         (if (symbolp head-expr)
-             (type-infer (cons head-expr (rest tree)) head-syms defined-types)
-             (loop with args = (rest tree)
-                   for i from 0 below (length args)
-                   for (expr type syms)
-                     = (multiple-value-list (type-infer (elt args i) sym-types defined-types))
-                   collect expr into arg-exprs
-                   do (setf sym-types (merge-sym-types sym-types syms))
-                   finally (return (values (cons head-expr arg-exprs) nil sym-types))))))
+         (multiple-value-bind (arg+type sym-types)
+             (get-sym-types (rest tree) sym-types defined-types)
+           (setf sym-types (merge-sym-types head-syms sym-types))
+           (cond
+             ((and (listp head-type)
+                   (eq '|fn| (first head-type))
+                   (second head-type))
+              (check-function-arg-types (cons head-expr (rest tree)) head-type
+                                        sym-types defined-types))
+             ((symbolp head-expr)
+              (type-infer (cons head-expr (mapcar #'car arg+type)) sym-types defined-types))
+             (t (values (cons head-expr (mapcar #'car arg+type)) nil sym-types))))))
       (t (error "Expression ~s is not parseable" tree)))))
-
-;; (type-infer '(+ 1 "hello") '((+ . (|fn| (|int| |int|) |int|))) '((|int| . 0) (|char| . 0)))
-
-(type-infer (read "
-fn (augend addend)
-   int (fn (f x)
-    (int augend) f ((int addend) f x))") '() '((|int| . 0) (|string| . 0)))
-(LAMBDA (|augend| |addend|)
-  (LAMBDA (|f| |x|)
-    (|augend| |f| ((|int| |addend|) |f| |x|))))
