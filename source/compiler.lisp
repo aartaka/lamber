@@ -172,10 +172,9 @@
 
 (defun optimize (tree)
   (multiple-value-bind (expr return-type all-types)
-      (type-infer
-       (tree-shake
-        (de-alias
-         (plug-dummy-for-lib tree))))
+      (tree-shake
+       (de-alias
+        (plug-dummy-for-lib tree)))
     (let ((optimized
             (tree-shake
              (tree-shake
