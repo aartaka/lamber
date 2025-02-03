@@ -51,18 +51,18 @@ Raises warnings if there are type mismatches."
       ((and (consp value)
             (eq 'type (first value)))
        ;; What a spaghetti dish, yummy!
-       (destructuring-bind (type (&rest args) body)
+       (destructuring-bind (type (&rest args) constructor-body)
            value
          (declare (ignorable type))
-         (let* ((constructor `(lambda (,@args) ,body))
+         (let* ((constructor `(lambda (,@args) ,constructor-body))
                 (defined-types `((,name . ,(length args)) ,@defined-types))
                 (dummies (mapcar (lambda (arg) (gensym (string arg)))
                                  args))
                 (sym-types
                   `((,name . (|fn| (,@dummies)
-                                   `(,type ,@dummies)))
+                                   (,name ,@dummies)))
                     ,@(mapcar #'(lambda (arg dummy)
-                                  (cons arg `(|fn| ((,type ,@dummies)) ,dummy)))
+                                  `(,arg (|fn| ((,name ,@dummies)) ,dummy)))
                               args dummies)
                     ,@sym-types)))
            (multiple-value-bind (body-expr body-type final-sym-types)
@@ -176,11 +176,11 @@ Raises warnings if there are type mismatches."
          (warn "Constructed types (like ~a) should have arguments" head))
        (loop for sub in (rest tree)
              for (expr type syms)
-               = (multiple-value-list (type-infer sub))
+               = (multiple-value-list (type-infer sub sym-types defined-types))
              collect type into types
              collect expr into exprs
              do (setf sym-types (append syms sym-types))
-             finally (values `(,head ,@exprs) `(,head ,@types) sym-types)))
+             finally (return (values `(,head ,@exprs) `(,head ,@types) sym-types))))
       ;; Means it's a function, right?
       ((symbolp head)
        (let ((found-type (assoc head sym-types)))
