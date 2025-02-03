@@ -53,6 +53,9 @@
              tree
            (declare (ignorable let))
            (cond
+             ((eq 'type value)
+              `(let ((,name ,value))
+                 ,(de-alias body aliases)))
              ((symbolp value)
               (de-alias body `((,name . ,value) ,@aliases)))
              ((assoc name aliases)
@@ -175,6 +178,7 @@
       (tree-shake
        (de-alias
         (plug-dummy-for-lib tree)))
+    (declare (ignorable all-types))
     (let ((optimized
             (tree-shake
              (tree-shake
