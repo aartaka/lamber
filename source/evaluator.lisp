@@ -92,7 +92,9 @@
   (%process-applications (%lambda-ify term)))
 
 (defun eval (term)
-  (cl:eval (lambda-ify (optimize term))))
+  (multiple-value-bind (optimized type)
+      (optimize term)
+    (values (cl:eval (lambda-ify optimized)) type)))
 
 (defun run-with-lib (in &optional lib)
   (let* ((main (etypecase in
