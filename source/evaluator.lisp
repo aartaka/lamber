@@ -4,20 +4,12 @@
 (in-package :lamber)
 
 (defgeneric %lambda-ify (thing)
-  (:method ((thing (eql '|true|)))
-    true-var)
-  (:method ((thing (eql '|false|)))
-    false-var)
-  (:method ((thing (eql '|nil|)))
-    nil-var)
-  (:method ((thing (eql '|cons|)))
-    cons-var)
   (:method ((thing function))
     thing)
   (:method ((thing symbol))
     thing)
   (:method ((thing string))
-    (loop with acc = nil-var
+    (loop with acc = '|nil|
           for char across (reverse thing)
           do (setf acc `(lambda (z) (z ,(%lambda-ify char) ,acc)))
           finally (return acc)))

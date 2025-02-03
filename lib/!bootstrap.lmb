@@ -1,0 +1,6 @@
+def true = fn (a b) a .
+def false = fn (a b) b .
+def nil = fn (a b) b .
+
+def cons fn (car cdr)
+  (fn (f) f car cdr) .

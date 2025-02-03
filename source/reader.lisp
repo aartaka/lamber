@@ -48,7 +48,7 @@
                (values
                 `(if ,condition
                      ,then
-                     ,nil-var)
+                     |nil|)
                 rest)))))
       ((memqual-string (first list) '("fn" "lambda" "function"))
        (let ((args (second list)))

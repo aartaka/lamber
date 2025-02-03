@@ -3,11 +3,6 @@
 
 (in-package :lamber)
 
-(defvar nil-var '(lambda (thn) (lambda (els) els)))
-(defvar false-var nil-var)
-(defvar true-var '(lambda (thn) (lambda (els) thn)))
-(defvar cons-var '(lambda (head) (lambda (tail) (lambda (pair-fn) (pair-fn head tail)))))
-
 (defun tree-find (thing tree)
   (typecase tree
     ;; FIXME: Doesn't handle dotted lists.
