@@ -8,6 +8,10 @@
     thing)
   (:method ((thing symbol))
     thing)
+  (:method ((thing (eql t)))
+    '|true|)
+  (:method ((thing (eql nil)))
+    '|nil|)
   (:method ((thing string))
     (loop with acc = '|nil|
           for char across (reverse thing)
