@@ -62,6 +62,7 @@ def eq fn (m n)
   else false
 end
 
+alias eq? eq .
 alias = eq .
 alias == eq .
 alias === eq .
@@ -161,4 +162,5 @@ def gcd fn (a b)
     then x
     else r y : mod x y
   end
-  (Z2 %gcd) a b .
+  (Z2 %gcd) a b
+end

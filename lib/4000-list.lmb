@@ -178,6 +178,8 @@ def equal fn (pred a b)
   all %equal : zip a b
 end
 
+alias equal? equal .
+
 def insert fn (x cmp list)
   list
   (Z (fn (r h t x)
