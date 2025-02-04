@@ -2,5 +2,6 @@ def true = fn (a b) a .
 def false = fn (a b) b .
 def nil = fn (a b) b .
 
+;; Once/if there are types, replace "fn" with "type"
 def cons fn (car cdr)
   (fn (f) f car cdr) .
