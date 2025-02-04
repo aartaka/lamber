@@ -1,7 +1,7 @@
-def ratio fn (numer denom)
-  local divisor = gcd numer denom .
-  cons (div numer divisor)
-       (div denom divisor)
+def ratio type (numerator denominator)
+  local divisor = gcd numerator denominator .
+  cons (div numerator divisor)
+       (div denominator divisor)
 end
 def numerator car .
 def denominator cdr .

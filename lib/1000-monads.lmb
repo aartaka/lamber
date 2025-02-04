@@ -3,16 +3,17 @@
 
 alias nothing nil .
 
-def maybe fn (x just none)
-  just x .
+def maybe type (x)
+  fn (just none)
+    just x .
 
 alias box maybe .
 alias option maybe .
 
 alias option maybe .
 
-def isnothing fn (maybe)
-  maybe (fn _ false) true .
+def isnothing fn (mb)
+  mb (fn _ false) true .
 
 alias isNothing isnothing .
 
@@ -23,8 +24,8 @@ alias just? isjust .
 alias justp isjust .
 alias state? isjust .
 
-def just fn (default maybe)
-  maybe identity default .
+def just fn (default mb)
+  mb identity default .
 
 alias fromMaybe just .
 alias result just .

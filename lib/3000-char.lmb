@@ -1,5 +1,5 @@
 def iscontrol fn (c)
-  or (char= c 127) (< c ' ') .
+  or (char= 127 : char c) (> ' ' : char c) .
 
 alias isControl iscontrol .
 alias controlp iscontrol .
@@ -11,7 +11,7 @@ def isspace fn (c)
   local %isspace = fn l
     if (null l)
     then false
-    else or (char= c (car l)) (%isspace (cdr l))
+    else or (char= (char c) (car l)) (%isspace (cdr l))
   end
   %isspace [' ' '\n' '\t' '\r']
 end
@@ -24,101 +24,101 @@ alias isSpace isspace .
 
 ;; Only English/Latin ASCII letters
 def islower fn (c)
-  or (between 97 122 c)
-     (or (between 223 246 c)
-         (between 248 255 c)) .
+  or (between 97 122 : char c)
+     (or (between 223 246 : char c)
+         (between 248 255 : char c)) .
 
 alias isLower islower .
 alias lowercasep islower .
 alias lowercase? islower .
 
 def isupper fn (c)
-  or (between 65 90 c)
-     (or (between 192 214 c)
-         (between 216 222 c)) .
+  or (between 65 90 : char c)
+     (or (between 192 214 : char c)
+         (between 216 222 : char c)) .
 
 alias isUpper isupper .
 alias uppercasep isupper .
 alias uppercase? isupper .
 
 def isalpha fn (c)
-  or : islower c
-     : isupper c .
+  or : islower : char c
+     : isupper : char c .
 
 alias alphap isalpha .
 alias isAlpha isalpha .
 
 def isdigit fn (c)
-  between '0' '9' c .
+  between '0' '9' : char c .
 
 alias isDigit isdigit .
 alias digitp isdigit .
 alias digit? isdigit .
 
 def isoctdigit fn (c)
-  between '0' '7' c .
+  between '0' '7' : char c.
 
 alias isOctDigit isoctdigit .
 
 def ishexdigit fn (c)
-  or (isdigit c)
-     (or (between 'A' 'F' c)
-         (between 'a' 'f' c)) .
+  or (isdigit : char c)
+     (or (between 'A' 'F' : char c)
+         (between 'a' 'f' : char c)) .
 
 alias isHexDigit ishexdigit .
 
 def isalnum fn (c)
-  or : isalpha c
-     : isdigit c .
+  or : isalpha : char c
+     : isdigit : char c .
 
 alias alphanumericp isalnum .
 alias alphanumeric? isalnum .
 alias isAlphaNum isalnum .
 
 def isascii fn (c)
-  < c 128 .
+  < (char c) 128 .
 
 alias isAscii isascii .
 alias asciip isascii .
 alias ascii? isascii .
 
 def islatin1 fn (c)
-  < c 256 .
+  < (char c) 256 .
 
 alias isLatin1 islatin1 .
 alias latin1p islatin1 .
 alias latin1? islatin1 .
 
 def isasciiupper fn (c)
-  and : isupper c
-      : isascii c .
+  and : isupper : char c
+      : isascii : char c .
 
 def isasciilower fn (c)
-  and : islower c
-      : isascii c .
+  and : islower : char c
+      : isascii : char c .
 
 def tolower fn (c)
-   + c (if (between 'A' 'Z' c)
+   + c (if (between 'A' 'Z' : char c)
          then - 'a' 'A'
-        else if (between 'À' 'Þ' c)
+        else if (between 'À' 'Þ' : char c)
          then - 'à' 'À'
         else 0)
 end
 
 def toupper fn (c)
-   - c (if (between 'a' 'z' c)
+   - c (if (between 'a' 'z' : char c)
          then - 'a' 'A'
-        else if (between 'à' 'þ' c)
+        else if (between 'à' 'þ' : char c)
          then - 'à' 'À'
         else 0)
 end
 
 def digittoint fn (c)
-  if (between '0' '9' c)
+  if (between '0' '9' : char c)
    then - c 48
-  else if (between 'A' 'F' c)
+  else if (between 'A' 'F' : char c)
    then - c 55
-  else if (between 'a' 'f' c)
+  else if (between 'a' 'f' : char c)
    then - c 87
   else
    0
@@ -126,9 +126,9 @@ end
 
 def inttodigit fn (i)
   if (between 0 9 i)
-   then + i 48
+   then char : + i 48
   else if (between 10 15 i)
-   then + i 55
+   then char : + i 55
   else
-   0
+   char : 0
 end

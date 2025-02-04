@@ -1,26 +1,26 @@
 def writec fn (c)
-  #.(LAMBDA (x) (LAMBER::EVAL (PROGN (PRINC (LAMBER::TOCHAR x)) x))) c .
+  #.(LAMBDA (x) (LAMBER::EVAL (PROGN (PRINC (LAMBER::TOCHAR x)) x))) : char c .
 
 alias putChar writec .
 
 ;; Leaking abstraction: map doesn't work without these reverses!
-def writes fn (str)
-  reverse : reverse : map writec str .
+def writes fn (string)
+  reverse : reverse : map writec : str string .
 
 alias putStr writes .
 
-def writesln fn (str)
-  writes : rcons '\n' str  .
+def writesln fn (string)
+  writes : rcons '\n' : str string  .
 
 alias putStrLn writesln .
 
-def writef fn (name str)
+def writef fn (name string)
   #.(LAMBDA (NAME)
      (LAMBDA (STR)
       (LAMBER::EVAL
        (UIOP:WITH-OUTPUT-FILE (F (LAMBER::TOSTRING NAME)
                               #.(INTERN "IF-EXISTS" "KEYWORD") (INTERN "SUPERSEDE" "KEYWORD"))
-        (WRITE-STRING (LAMBER::TOSTRING STR) F))))) name str .
+        (WRITE-STRING (LAMBER::TOSTRING STR) F))))) (str name) (str string) .
 
 def writeFile writef .
 
@@ -38,6 +38,6 @@ def readln fn (dummy)
 alias getLine readln .
 
 def readf fn (name)
-  #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) name .
+  #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) (str name) .
 
 alias readFile readf .

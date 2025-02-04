@@ -5,7 +5,7 @@ def stoi fn (string)
     then val
     else r val : rest str
   end
-  (Z2 %stoi) 0 string
+  int : (Z2 %stoi) 0 string
 end
 
 alias parseInt stoi .
@@ -19,7 +19,7 @@ def stor fn (string)
 end
 
 def rtoi fn (ratio)
-  div (numer ratio) (denom ratio) .
+  int : div (numer ratio) (denom ratio) .
 
 alias rfloor rtoi .
 
@@ -35,14 +35,14 @@ def itos fn (i)
     else
      cons (tochar : mod i 10) (itos : div i 10)
   end
-  reverse : %itos i
+  str : reverse : %itos i
 end
 
 def rtos fn (r)
-  intercalate "/" [(itos : numer r) (itos : denom r)] .
+  str : intercalate "/" [(itos : numer r) (itos : denom r)] .
 
 def btos fn (b)
-  if b then "true" else "false" .
+  str : if b then "true" else "false" .
 
 def ltos fn (inner list)
-  rcons ']' : cons '[' : intercalate ", " : map inner list .
+  str : rcons ']' : cons '[' : intercalate ", " : map inner list .

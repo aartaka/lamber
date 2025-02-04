@@ -1,10 +1,10 @@
 def tokens fn (splitpred string)
   local reverse = complement splitpred .
   if (some splitpred string)
-    then cons : takewhile reverse string
-              : tokens splitpred : cdr : dropwhile reverse string
+    then cons : takewhile reverse : str string
+              : tokens splitpred : cdr : dropwhile reverse : str string
    else
-     singleton string
+     singleton : str string
 end
 
 def lines fn (string)

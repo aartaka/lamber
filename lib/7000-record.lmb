@@ -1,12 +1,12 @@
 ;; FIXME: Better (recursive?) implementation with arbitrary args?
 ;; Maybe just use conses?
-def record1 fn (a x) x a .
-def record2 fn (a b x) cons .
-def record3 fn (a b c x) x a b c .
-def record4 fn (a b c d x) x a b c d .
-def record5 fn (a b c d e x) x a b c d e .
-def record6 fn (a b c d e f x) x a b c d e f .
-def record7 fn (a b c d e f g x) x a b c d e f g .
+def record1 type (a) fn (x) x a .
+def record2 type (a b) fn (x) x a b .
+def record3 type (a b c) fn (x) x a b c .
+def record4 type (a b c d) fn (x) x a b c d .
+def record5 type (a b c d e) fn (x) x a b c d e .
+def record6 type (a b c d e f) fn (x) x a b c d e f .
+def record7 type (a b c d e f g) fn (x) x a b c d e f g .
 
 alias tuple record2 .
 alias triple record3 .

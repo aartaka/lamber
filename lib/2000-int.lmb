@@ -1,5 +1,5 @@
 def succ fn (n f x)
-  f : n f x .
+  int : f : (int n) f x .
 
 alias 1+ succ .
 alias ++ succ .
@@ -7,28 +7,26 @@ alias incf succ .
 alias inc succ .
 
 def add fn (augend addend f x)
-  augend f : addend f x .
+  int : (int augend) f : (int addend) f x .
 
 alias + add .
 alias plus add .
 
 def mult fn (multiplicand multiplier f)
-  multiplicand : multiplier f .
+  int : (int multiplicand) : (int multiplier) f .
 
 alias * mult .
 alias × mult .
 
 def pow fn (base expt)
-  expt base .
+  int : expt base .
 
 alias ** pow .
 alias ^ pow .
 alias expt pow .
 
 def pred fn (n f x)
-  n (fn (g h) h (g f))
-    (fn u x)
-    (fn u u)
+  int : n (fn (g h) h (g f)) (fn u x) (fn u u)
 end
 
 alias 1- pred .
@@ -37,13 +35,13 @@ alias decf pred .
 alias dec pred .
 
 def sub fn (minuend subtrahend)
-  subtrahend pred minuend .
+  int : (int subtrahend) pred (int minuend) .
 
 alias - sub .
 alias minus sub .
 
 def iszero fn (n)
-  n (fn x false) true .
+  bool : n (fn x false) true .
 
 alias is0 iszero .
 alias zerop iszero .
@@ -96,14 +94,14 @@ alias >= geq .
 def div fn (dividend divisor)
   local F = fn (m f t)
     m T' (fn (c) f : c t) id .
-  fn (f x)
-    dividend T' (K x) (dividend (F divisor f) x) .
+  int (fn (f x)
+       (int dividend) T' (K x) ((int dividend) (F (int divisor) f) x)) .
 
 alias / div .
 alias quot div .
 
 def mod fn (dividend divisor)
-  sub dividend : mult divisor : div dividend divisor .
+  int : sub (int dividend) : mult (int divisor) : div dividend divisor .
 
 alias % mod .
 alias rem mod .
@@ -129,14 +127,14 @@ def log fn (num base)
     then 1
     else : succ : %log : div x base
   end
-  %log num
+  int : %log num
 end
 
 def min fn (m n)
-  (leq m n) m n .
+  int : (leq m n) m n .
   
 def max fn (m n)
-  (leq m n) n m .
+  int : (leq m n) n m .
 
 def between fn (low high x)
   and (geq x low) (leq x high) .
@@ -145,13 +143,13 @@ def clamp fn (low high x)
   max low : min x high .
 
 def iseven fn n
-  n not true .
+  bool : n not true .
 
 alias evenp iseven .
 alias even? iseven .
 
 def isodd fn n
-  n not false .
+  bool : n not false .
 
 alias oddp isodd .
 alias odd? isodd .
@@ -162,5 +160,5 @@ def gcd fn (a b)
     then x
     else r y : mod x y
   end
-  (Z2 %gcd) a b
+  int : (Z2 %gcd) a b
 end
