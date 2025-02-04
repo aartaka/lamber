@@ -85,7 +85,7 @@
                           '("let" "def" "define" "local" "var" "alias"
                             "if" "when" "then" "else"
                             "fn" "lambda" "function"
-                            "true" "false" "nil" "cons"
+                            "type" "constructor"
                             "end" ".")))
       tree
       (progn
@@ -102,11 +102,12 @@
            ;; encode this in IR syntax, but oh well.)
            `(,let ((,name ,(warn-on-unbound value name (cons name path))))
               ,(warn-on-unbound body enclosing-function (cons name path)))))
-    (lambda (destructuring-bind (lambda (&rest args) body)
-                tree
-              (declare (ignorable lambda))
-              `(lambda (,@args)
-                 ,(warn-on-unbound body enclosing-function (append args path)))))
+    ((lambda type)
+     (destructuring-bind (lambda (&rest args) body)
+         tree
+       (declare (ignorable lambda))
+       `(lambda (,@args)
+          ,(warn-on-unbound body enclosing-function (append args path)))))
     (t (mapcar (lambda (subtree)
                  (warn-on-unbound subtree enclosing-function path))
                tree))))

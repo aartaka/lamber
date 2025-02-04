@@ -43,10 +43,11 @@ There's a number of guiding principles Lamber is built around:
   - Footprint :: Implementation should be small enough.
   - Build :: All the libraries and apps are provided as files on CLI or in ~LAMBER_PATH~ and sorted lexicographically. Want to load your lib earlier? Just rename the file!
   - Syntactical :: There shouldn't be more than ten pieces of syntax in the language.
-    - As of the moment of writing, there are seven:
+    - As of the moment of writing, there are eight:
       - ~let~ / ~def~ etc. variable definition.
       - ~if~ branching.
       - ~function~-s.
+      - ~type~-s.
       - Literal values, like booleans, numbers, and strings.
       - Function calls.
       - Colons.

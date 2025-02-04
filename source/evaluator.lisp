@@ -8,6 +8,8 @@
     thing)
   (:method ((thing symbol))
     thing)
+  (:method ((thing (eql 'type)))
+    `(lambda (x) x))
   (:method ((thing (eql t)))
     '|true|)
   (:method ((thing (eql nil)))
@@ -54,6 +56,10 @@
             `((,(%lambda-ify cond)
                (lambda (,(gensym)) ,(%lambda-ify then))
                (lambda (,(gensym)) ,(%lambda-ify else))))))
+      (type (destructuring-bind (type (&rest args) body)
+                thing
+              (declare (ignorable type))
+              (%lambda-ify `(lambda (,@args) ,body))))
       (lambda (destructuring-bind (lambda (arg &rest args) body)
                   thing
                 (declare (ignorable lambda))
