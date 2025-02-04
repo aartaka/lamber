@@ -21,6 +21,7 @@ def isjust = complement isnothing .
 alias isJust isjust .
 alias just? isjust .
 alias justp isjust .
+alias state? isjust .
 
 def just fn (default maybe)
   maybe identity default .
