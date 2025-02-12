@@ -1,3 +1,5 @@
+alias some? identity .
+
 alias ⊤ true .
 alias constantly true .
 
