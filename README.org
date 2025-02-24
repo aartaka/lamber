@@ -61,7 +61,7 @@ There's a number of guiding principles Lamber is built around:
 git clone --recursive https://github.com/aartaka/lamber  
 #+end_src
 - Install a Lisp implementation like [[https://sbcl.org/][SBCL]].
-- And compile the ~lamber~ executable with ~make~
+- Compile the ~lamber~ executable with ~make all~
 - Use the generated ~lamber~ as in
 #+begin_src sh
   ./lamber example/hello.lmb
