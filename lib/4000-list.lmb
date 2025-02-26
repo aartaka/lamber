@@ -153,6 +153,8 @@ def splitwhen fn (pred list)
   cons prefix suffix
 end
 
+alias splitwith splitwhen .
+
 def unzip fn (list)
   cons (map car list) (map cdr list) .
 
