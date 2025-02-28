@@ -87,14 +87,21 @@ Raises warnings if there are type mismatches."
       tree
     (declare (ignorable lambda))
     (multiple-value-bind (body return-type sym-types)
-        (type-infer body sym-types defined-types)
+        (type-infer body `(,@(mapcar (lambda (arg) `(,arg . nil)) args)
+                           ,@sym-types)
+                    defined-types)
       (values
        `(lambda (,@args) ,body)
        `(|fn| (,@(mapcar (lambda (arg)
                            (cdr (assoc arg sym-types)))
                          args))
               ,return-type)
-       sym-types))))
+       ;; This is to cleanup the local arg inference.
+       (remove-if
+        (lambda (name)
+          (member name args))
+        sym-types
+        :key #'car :count (length args))))))
 
 (defun types-compatible-p (type1 type2)
   (or (null type1)
