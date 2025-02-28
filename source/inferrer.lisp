@@ -36,7 +36,7 @@ Raises warnings if there are type mismatches."
     (cond
       ((eq 'type value)
        (multiple-value-bind (body-expr body-type final-sym-types)
-           (type-infer body sym-types `((,name . 0) ,defined-types))
+           (type-infer body sym-types `((,name . 0) ,@defined-types))
          (let ((val (gensym "val")))
            (values `(let ((,name (lambda (,val) ,val)))
                       ,body-expr)
