@@ -1,10 +1,12 @@
-def true = fn (a b) a .
-def false = fn (a b) b .
-def nil = fn (a b) b .
+def bool type .
+def null type .
+
+def true = bool : fn (a b) a .
+def false = bool : fn (a b) b .
+def nil = null : fn (a b) b .
 
 def int type .
 def char type .
-def bool type .
 def str type .
 
 def cons type (car cdr)
