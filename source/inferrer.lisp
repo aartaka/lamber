@@ -3,7 +3,7 @@
 
 (in-package :lamber)
 
-(define-generic type-infer ((tree (eql '|nil|)) &optional sym-types defined-types)
+(define-generic type-infer ((tree symbol) &optional sym-types defined-types)
   "Infer the DEFINED-TYPE returned by TREE.
 Return
 1. The TREE itself, modified when necessary.
@@ -15,14 +15,7 @@ DEFINED-TYPES are types defined so far.
 NIL is an always defined 'anything' type.
 Raises warnings if there are type mismatches."
   (declare (ignorable defined-types))
-  (values tree nil sym-types))
-
-(defmethod type-infer ((tree (eql '|false|)) &optional sym-types defined-types)
-  (declare (ignorable defined-types))
-  (values tree '|bool| sym-types))
-(defmethod type-infer ((tree (eql '|true|)) &optional sym-types defined-types)
-  (declare (ignorable defined-types))
-  (values tree '|bool| sym-types))
+  (values tree (cdr (assoc tree sym-types)) sym-types))
 
 (defmethod type-infer ((tree integer) &optional sym-types defined-types)
   (declare (ignorable defined-types))
@@ -35,10 +28,6 @@ Raises warnings if there are type mismatches."
 (defmethod type-infer ((tree string) &optional sym-types defined-types)
   (declare (ignorable defined-types))
   (values tree '|str| sym-types))
-
-(defmethod type-infer ((tree symbol) &optional sym-types defined-types)
-  (declare (ignorable defined-types))
-  (values tree (cdr (assoc tree sym-types)) sym-types))
 
 (defun infer-let (tree &optional sym-types defined-types)
   (destructuring-bind (let ((name value)) body)
