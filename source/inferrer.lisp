@@ -135,7 +135,9 @@ Raises warnings if there are type mismatches."
               do (warn "Argument ~s to ~a has type mismatch: ~a vs. expected ~a"
                        i (first tree) arg-type (elt arg-types i))
             finally (return (values (cons (first tree) arg-exprs)
-                                    return-type
+                                    (if (= (length arg+type) (length arg-types))
+                                        return-type
+                                        `(|fn| ,(subseq arg-types (length arg+type)) ,return-type))
                                     (merge-sym-types sym-types arg-sym-types)))))))
 
 (defmethod type-infer ((tree cons) &optional sym-types defined-types)
