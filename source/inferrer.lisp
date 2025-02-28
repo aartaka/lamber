@@ -1,6 +1,14 @@
 ;;;; SPDX-FileCopyrightText: Artyom Bologov
 ;;;; SPDX-License-Identifier: BSD-2 Clause
 
+;; TODO: e.g. infer return types of F & G as |bool|-s
+;; def disjoin fn (f g x)
+;;   or (f x) (g x) .
+;; TODO: Handle nesting better in general
+;; TODO: Variable types
+;; TODO: Union/intersection types
+;; TODO: Introduce the |fn| type and use it on everything FUNCALL-ed
+
 (in-package :lamber)
 
 (define-generic type-infer ((tree symbol) &optional sym-types defined-types)
