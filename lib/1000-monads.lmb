@@ -33,8 +33,12 @@ alias result just .
 ;; Either implementation from
 ;; https://text.marvinborner.de/2024-11-18-00.html#either
 
-def left fn (value lft rght) lft value .
-def right fn (value lft rght) rght value .
+def left type (leftval)
+  fn (lft rght)
+    lft leftval .
+def right type (rightval)
+  fn (lft rght)
+    rght rightval .
 
 def either fn (leftfn rightfn ethr)
   ethr leftfn rightfn .
@@ -53,14 +57,16 @@ alias isRight isright .
 alias right? isright .
 alias rightp isright .
 
-def getleft fn (either)
+def leftval fn (either)
   either identity (constantly nil) .
 
+alias getleft leftval .
 alias getLeft getleft .
 alias fromLeft getleft .
 
-def getright fn (either)
+def rightval fn (either)
   either (constantly nil) identity .
 
+alias getright rightval .
 alias getRight getright .
 alias fromRight getright .

@@ -6,7 +6,7 @@ alias constantly true .
 alias ⊥ false .
 
 def not fn p
-  bool : p false true .
+  bool : (bool p) false true .
 
 alias ¬ not .
 alias ⫟ not .
@@ -16,7 +16,7 @@ alias negation not .
 alias not! not .
 
 def and fn (p q)
-  bool : p q p .
+  bool : (bool p) (bool q) p .
 
 alias ∧ and .
 alias & and .
@@ -24,7 +24,7 @@ alias conjunction and .
 alias and? and .
 
 def or fn (p q)
-  bool : p p q .
+  bool : (bool p) p (bool q) .
 
 alias | or .
 alias ∨ or .
@@ -32,7 +32,7 @@ alias disjunction or .
 alias or? or .
 
 def xor fn (p q)
-  bool : p (not q) q .
+  bool : (bool p) (not q) q .
 
 alias ⊻ xor .
 alias ⊕ xor .
@@ -75,7 +75,7 @@ alias ⊃ impl .
 alias implies impl .
 
 def mux fn (p q selector)
-  or (and p (not selector)) (and q selector) .
+  or (and p : not : bool selector) (and q selector) .
 
 def complement fn (pred b)
   not : pred b .

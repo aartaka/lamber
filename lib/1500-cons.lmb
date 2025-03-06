@@ -15,7 +15,7 @@ alias tail cdr .
 alias rest cdr .
 
 def null fn (pair)
-  pair (fn (h t x) false) true .
+  bool : pair (fn (h t x) false) true .
 
 alias empty null .
 alias emptyp null .
