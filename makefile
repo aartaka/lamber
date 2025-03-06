@@ -1,7 +1,7 @@
 LISP ?= sbcl
 SBCL_FLAGS =
 ifeq ($(LISP), sbcl)
-	SBCL_FLAGS = --dynamic-space-size 1024 --no-userinit --non-interactive
+	SBCL_FLAGS = --dynamic-space-size 4096 --no-userinit --non-interactive
 endif
 LISP_FLAGS ?= $(SBCL_FLAGS)
 DESTDIR ?= /usr/bin
