@@ -52,17 +52,20 @@
                     (%lambda-ify value)))))
       (if (destructuring-bind (if cond then else)
               thing
-            (declare (ignorable if))
+            (declare (ignorable if)
+                     (cl:optimize space))
             `((,(%lambda-ify cond)
                (lambda (,(gensym)) ,(%lambda-ify then))
                (lambda (,(gensym)) ,(%lambda-ify else))))))
       (type (destructuring-bind (type (&rest args) body)
                 thing
-              (declare (ignorable type))
+              (declare (ignorable type)
+                       (cl:optimize space))
               (%lambda-ify `(lambda (,@args) ,body))))
       (lambda (destructuring-bind (lambda (arg &rest args) body)
                   thing
-                (declare (ignorable lambda))
+                (declare (ignorable lambda)
+                         (cl:optimize space))
                 `(lambda (,arg)
                    ,(%lambda-ify
                      (if args
@@ -96,6 +99,7 @@
 (defun eval (term)
   (multiple-value-bind (optimized type)
       (optimize term)
+    (declare (cl:optimize space (safety 0) (debug 0)))
     (values (cl:eval (lambda-ify optimized)) type)))
 
 (defun run-with-lib (in &optional lib)
