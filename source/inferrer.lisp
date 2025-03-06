@@ -11,7 +11,7 @@
 
 (in-package :lamber)
 
-(define-generic type-infer ((tree symbol) &optional sym-types defined-types)
+(define-generic type-infer ((tree symbol) &optional sym-types defined-types (wrapping-function "toplevel"))
   "Infer the DEFINED-TYPE returned by TREE.
 Return
 1. The TREE itself, modified when necessary.
@@ -22,22 +22,22 @@ Looks up the types of symbols in SYM-TYPES whenever necessary.
 DEFINED-TYPES are types defined so far.
 NIL is an always defined 'anything' type.
 Raises warnings if there are type mismatches."
-  (declare (ignorable defined-types))
+  (declare (ignorable defined-types wrapping-function))
   (values tree (cdr (assoc tree sym-types)) sym-types))
 
-(defmethod type-infer ((tree integer) &optional sym-types defined-types)
-  (declare (ignorable defined-types))
+(defmethod type-infer ((tree integer) &optional sym-types defined-types (wrapping-function "toplevel"))
+  (declare (ignorable defined-types wrapping-function))
   (values tree '|int| sym-types))
 
-(defmethod type-infer ((tree character) &optional sym-types defined-types)
-  (declare (ignorable defined-types))
+(defmethod type-infer ((tree character) &optional sym-types defined-types (wrapping-function "toplevel"))
+  (declare (ignorable defined-types wrapping-function))
   (values tree '|char| sym-types))
 
-(defmethod type-infer ((tree string) &optional sym-types defined-types)
-  (declare (ignorable defined-types))
+(defmethod type-infer ((tree string) &optional sym-types defined-types (wrapping-function "toplevel"))
+  (declare (ignorable defined-types wrapping-function))
   (values tree '|str| sym-types))
 
-(defun infer-let (tree &optional sym-types defined-types)
+(defun infer-let (tree &optional sym-types defined-types (wrapping-function "toplevel"))
   (destructuring-bind (let ((name value)) body)
       tree
     (declare (ignorable let))
@@ -67,13 +67,13 @@ Raises warnings if there are type mismatches."
                               args dummies)
                     ,@sym-types)))
            (multiple-value-bind (body-expr body-type final-sym-types)
-               (type-infer body sym-types defined-types)
+               (type-infer body sym-types defined-types wrapping-function)
              (values `(let ((,name ,constructor)) ,body-expr)
                      body-type final-sym-types)))))
       ;; TODO: Function types based on use of args in body, and
       ;; removal of arg types when function types is inferred.
       (t (multiple-value-bind (expr type new-sym-types)
-             (type-infer value sym-types defined-types)
+             (type-infer value sym-types defined-types name)
            (let ((augmented-types (cons `(,name . ,type) new-sym-types)))
              (multiple-value-bind (body body-type new-sym-types)
                  (type-infer body augmented-types defined-types)
@@ -82,14 +82,14 @@ Raises warnings if there are type mismatches."
                        body-type
                        new-sym-types))))))))
 
-(defun infer-lambda (tree &optional sym-types defined-types)
+(defun infer-lambda (tree &optional sym-types defined-types (wrapping-function "toplevel"))
   (destructuring-bind (lambda (&rest args) body)
       tree
     (declare (ignorable lambda))
     (multiple-value-bind (body return-type sym-types)
         (type-infer body `(,@(mapcar (lambda (arg) `(,arg . nil)) args)
                            ,@sym-types)
-                    defined-types)
+                    defined-types wrapping-function)
       (values
        `(lambda (,@args) ,body)
        `(|fn| (,@(mapcar (lambda (arg)
@@ -111,7 +111,7 @@ Raises warnings if there are type mismatches."
            (listp type2)
            (every #'types-compatible-p type1 type2))))
 
-(defun merge-sym-types (types1 types2)
+(defun merge-sym-types (types1 types2 wrapping-function)
   (flet ((assoc-ref (item alist)
            (cdr (assoc item alist))))
     (loop with types2 = (remove-if #'null types2 :key #'cdr)
@@ -122,48 +122,49 @@ Raises warnings if there are type mismatches."
           else if (and (null type) type2)
                  collect (assoc sym types2) into types
           else if (and type2 (not (types-compatible-p type type2)))
-                 do (warn "Types ~a and ~a are incompatible for ~a" type type2 sym)
+                 do (warn "In ~a: types ~a and ~a are incompatible for ~a"
+                          wrapping-function type type2 sym)
           else
             collect (cons sym type) into types
             finally (return (loop for pair in types2
                                   do (pushnew pair types :key #'car)
                                   finally (return types))))))
 
-(defun get-sym-types (args sym-types defined-types)
+(defun get-sym-types (args sym-types defined-types wrapping-function)
   (loop for i from 0 below (length args)
         for (expr type syms)
           = (multiple-value-list (type-infer (elt args i) sym-types defined-types))
         collect (cons expr type) into arg+type
-        do (setf sym-types (merge-sym-types sym-types syms))
+        do (setf sym-types (merge-sym-types sym-types syms wrapping-function))
         finally (return (values arg+type sym-types))))
 
-(defun check-function-arg-types (tree type sym-types defined-types)
+(defun check-function-arg-types (tree type sym-types defined-types wrapping-function)
   (destructuring-bind (fn (&rest arg-types) return-type)
       type
     (declare (ignorable fn))
     (multiple-value-bind (arg+type arg-sym-types)
-        (get-sym-types (rest tree) sym-types defined-types)
+        (get-sym-types (rest tree) sym-types defined-types wrapping-function)
       (loop for (arg-expr . arg-type) in arg+type
             for i below (length arg+type)
             collect arg-expr into arg-exprs
             unless (types-compatible-p arg-type (elt arg-types i))
-              do (warn "Argument ~s to ~a has type mismatch: ~a vs. expected ~a"
-                       i (first tree) arg-type (elt arg-types i))
+              do (warn "In ~a: argument ~s to ~a has type mismatch: ~a vs. expected ~a"
+                       wrapping-function i (first tree) arg-type (elt arg-types i))
             finally (return (values (cons (first tree) arg-exprs)
                                     (if (= (length arg+type) (length arg-types))
                                         return-type
                                         `(|fn| ,(subseq arg-types (length arg+type)) ,return-type))
-                                    (merge-sym-types sym-types arg-sym-types)))))))
+                                    (merge-sym-types sym-types arg-sym-types wrapping-function)))))))
 
-(defmethod type-infer ((tree cons) &optional sym-types defined-types)
+(defmethod type-infer ((tree cons) &optional sym-types defined-types (wrapping-function "toplevel"))
   (declare (ignorable defined-types))
   sym-types defined-types
   (let ((head (first tree)))
     (cond
       ((eq 'let head)
-       (infer-let tree sym-types defined-types))
+       (infer-let tree sym-types defined-types wrapping-function))
       ((eq 'lambda head)
-       (infer-lambda tree sym-types defined-types))
+       (infer-lambda tree sym-types defined-types wrapping-function))
       ((and (assoc head defined-types)
             (zerop (cdr (assoc head defined-types)))
             (second tree)
@@ -174,7 +175,7 @@ Raises warnings if there are type mismatches."
       ((and (assoc head defined-types)
             (zerop (cdr (assoc head defined-types))))
        (multiple-value-bind (expr type syms)
-           (type-infer (second tree) sym-types defined-types)
+           (type-infer (second tree) sym-types defined-types wrapping-function)
          (declare (ignorable type))
          ;; ;; Useless for explicit type casts?
          ;; (unless (types-compatible-p head type)
@@ -196,22 +197,22 @@ Raises warnings if there are type mismatches."
        (let ((found-type (assoc head sym-types)))
          (cond
            ((and found-type (consp (cdr found-type)) (eq '|fn| (cadr found-type)))
-            (check-function-arg-types tree (cdr found-type) sym-types defined-types))
+            (check-function-arg-types tree (cdr found-type) sym-types defined-types wrapping-function))
            (t (values tree nil sym-types)))))
       ((listp head)
        (multiple-value-bind (head-expr head-type head-syms)
            (type-infer head sym-types defined-types)
          (declare (ignorable head-type))
          (multiple-value-bind (arg+type sym-types)
-             (get-sym-types (rest tree) sym-types defined-types)
-           (setf sym-types (merge-sym-types head-syms sym-types))
+             (get-sym-types (rest tree) sym-types defined-types wrapping-function)
+           (setf sym-types (merge-sym-types head-syms sym-types wrapping-function))
            (cond
              ((and (listp head-type)
                    (eq '|fn| (first head-type))
                    (second head-type))
               (check-function-arg-types (cons head-expr (rest tree)) head-type
-                                        sym-types defined-types))
+                                        sym-types defined-types wrapping-function))
              ((symbolp head-expr)
-              (type-infer (cons head-expr (mapcar #'car arg+type)) sym-types defined-types))
+              (type-infer (cons head-expr (mapcar #'car arg+type)) sym-types defined-types wrapping-function))
              (t (values (cons head-expr (mapcar #'car arg+type)) nil sym-types))))))
       (t (values tree nil sym-types)))))
