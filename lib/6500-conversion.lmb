@@ -29,13 +29,13 @@ def itor fn (int)
 ;; To string
 def itos fn (i)
   local tochar = (+ '0') .
-  local %itos = fn (i)
-    if (< i 10)
-     then singleton : tochar i
-    else
-     cons (tochar : mod i 10) (itos : div i 10)
+  local %itos = fn (r acc num)
+   if (< num 10)
+    then cons (tochar num) acc
+   else
+    r (cons (tochar (mod num 10)) acc) (div num 10)
   end
-  str : reverse : %itos i
+  str : (Z2 %itos) nil i
 end
 
 def rtos fn (r)
