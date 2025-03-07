@@ -10,6 +10,8 @@ def S fn (a b c)
 def K fn (a b)
   a .
 
+alias KI false .
+
 def compose fn (a b c)
   a : b c .
 
