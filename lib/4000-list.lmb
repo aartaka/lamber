@@ -32,15 +32,15 @@ def filter fn (pred list)
     then (cons e a)
     else a
   end
-  foldr %filter nil pred
+  foldr %filter nil list
 end
 
 def remove fn (pred list)
   filter (complement pred) list .
 
 def reverse fn list
-  local %reverse = fn (h t i)
-    t %reverse : cons h i
+  local %reverse = fn (h t acc)
+    t %reverse : cons h acc
   end
   list %reverse nil
 end
