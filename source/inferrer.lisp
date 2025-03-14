@@ -112,6 +112,7 @@ Raises warnings if there are type mismatches."
            (every #'types-compatible-p type1 type2))))
 
 (defun merge-sym-types (types1 types2 wrapping-function)
+  "Merge (unite) two type maps, warning on type clashes."
   (flet ((assoc-ref (item alist)
            (cdr (assoc item alist))))
     (loop with types2 = (remove-if #'null types2 :key #'cdr)
