@@ -1,3 +1,5 @@
+def any type .
+
 def bool type .
 
 def true = bool : fn (a b) a .
