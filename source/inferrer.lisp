@@ -180,7 +180,7 @@ Raises warnings if there are type mismatches."
          ;; ;; Useless for explicit type casts?
          ;; (unless (types-compatible-p head type)
          ;;   (warn "Types ~a and and ~a are not compatible for ~a" head type tree))
-         (values expr head syms)))
+         (values expr (unless (eq '|any| head) head) syms)))
       ((and (assoc head defined-types)
             (plusp (cdr (assoc head defined-types))))
        (unless (second tree)
