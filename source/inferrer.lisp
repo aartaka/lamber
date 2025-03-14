@@ -127,9 +127,9 @@ Raises warnings if there are type mismatches."
                           wrapping-function type type2 sym)
           else
             collect (cons sym type) into types
-            finally (return (loop for pair in types2
-                                  do (pushnew pair types :key #'car)
-                                  finally (return types))))))
+          finally (return (loop for pair in types2
+                                do (pushnew pair types :key #'car)
+                                finally (return types))))))
 
 (defun get-sym-types (args sym-types defined-types wrapping-function)
   (loop for i from 0 below (length args)
@@ -198,7 +198,16 @@ Raises warnings if there are type mismatches."
        (let ((found-type (assoc head sym-types)))
          (cond
            ((and found-type (consp (cdr found-type)) (eq '|fn| (cadr found-type)))
-            (check-function-arg-types tree (cdr found-type) sym-types defined-types wrapping-function))
+            (multiple-value-bind (expr type syms)
+                (check-function-arg-types tree (cdr found-type) sym-types defined-types wrapping-function)
+              (values expr type
+                      (merge-sym-types
+                       syms (remove-if #'null
+                                       (mapcar (lambda (arg arg-type)
+                                                 (when (and arg-type (symbolp arg))
+                                                   (cons arg arg-type)))
+                                               (rest tree) (caddr found-type)))
+                       wrapping-function))))
            (t (values tree nil sym-types)))))
       ((listp head)
        (multiple-value-bind (head-expr head-type head-syms)
