@@ -40,7 +40,11 @@ alias dec pred .
 alias i-- dec .
 
 def sub fn (minuend subtrahend)
-  int : (int subtrahend) pred (int minuend) .
+  ;; Yes, a Lisp optimization in the middle of standard lib.
+  ;; Subtraction is likely the most inefficient function in Lambda Calculus,
+  ;; adding 3xSUBTRAHEND bindings
+  #.(LAMBDA (minuend) (LAMBDA (subtrahend) (LAMBER::EVAL (- (TONUM minuend) (TONUM subtrahend))))) minuend subtrahend .
+  ;; int : (int subtrahend) pred (int minuend) .
 
 alias - sub .
 alias minus sub .

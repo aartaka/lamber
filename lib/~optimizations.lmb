@@ -1,6 +1,0 @@
-def pred fn (n)
-  #.(LAMBDA (n) (LAMBER::EVAL (1- (TONUM n)))) n .
-
-def div fn (dividend divisor)
-  #.(LAMBDA (dividend) (LAMBDA (divisor) (LAMBER::EVAL (/ (TONUM dividend) (TONUM divisor)))))
-    dividend divisor .
