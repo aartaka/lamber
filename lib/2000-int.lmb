@@ -5,18 +5,21 @@ alias 1+ succ .
 alias ++ succ .
 alias incf succ .
 alias inc succ .
+alias i++ succ .
 
 def add fn (augend addend f x)
   int : (int augend) f : (int addend) f x .
 
 alias + add .
 alias plus add .
+alias i+ add .
 
 def mult fn (multiplicand multiplier f)
   int : (int multiplicand) : (int multiplier) f .
 
 alias * mult .
 alias × mult .
+alias i* mult .
 
 def pow fn (base expt)
   int : expt base .
@@ -24,6 +27,7 @@ def pow fn (base expt)
 alias ** pow .
 alias ^ pow .
 alias expt pow .
+alias i^ pow .
 
 def pred fn (n f x)
   int : n (fn (g h) h (g f)) (fn u x) (fn u u)
@@ -33,12 +37,14 @@ alias 1- pred .
 alias -- pred .
 alias decf pred .
 alias dec pred .
+alias i-- dec .
 
 def sub fn (minuend subtrahend)
   int : (int subtrahend) pred (int minuend) .
 
 alias - sub .
 alias minus sub .
+alias i- sub .
 
 def iszero fn (n)
   bool : n (fn x false) true .
@@ -53,6 +59,7 @@ def leq fn (m n)
 
 alias ≤ leq .
 alias <= leq .
+alias i<= leq .
 
 def eq fn (m n)
   if (leq m n)
@@ -66,6 +73,7 @@ alias == eq .
 alias === eq .
 alias int= eq .
 alias char= eq .
+alias i= eq .
 
 def lt fn (m n)
   leq (succ m) n .
@@ -74,6 +82,7 @@ alias < lt .
 alias less lt .
 alias lessp lt .
 alias below lt .
+alias i< lt .
 
 def gt fn : m n
   (leq m n) false true .
@@ -82,12 +91,14 @@ alias > gt .
 alias greater gt .
 alias greaterp gt .
 alias above gt .
+alias i> gt .
 
 def geq fn (m n)
   leq n m .
 
 alias ≥ geq .
 alias >= geq .
+alias i>= geq .
 
 ;; Obscure one listed by John Tromp with commentary:
 ;; "Discovered by Bertram Felgenhauer (int-e)"
@@ -99,12 +110,14 @@ def div fn (dividend divisor)
 
 alias / div .
 alias quot div .
+alias i/ div .
 
 def mod fn (dividend divisor)
   int : sub (int dividend) : mult (int divisor) : div dividend divisor .
 
 alias % mod .
 alias rem mod .
+alias i% mod .
 
 ;; Copied from John Tromp's divides.lam
 def divides fn (dividend divisor)
