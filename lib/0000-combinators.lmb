@@ -19,6 +19,7 @@ alias B compose .
 alias uni compose .
 alias ∘ compose .
 alias o compose .
+alias comp compose .
 
 def C fn (a b c)
   a c b .
