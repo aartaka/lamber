@@ -22,10 +22,13 @@
   (:method ((thing character))
     (%lambda-ify (char-code thing)))
   (:method ((thing integer))
-    (loop with acc = 'zero
-          repeat thing
-          do (setf acc (list 'f acc))
-          finally (return `(lambda (f) (lambda (zero) ,acc)))))
+    #'(lambda (f)
+        (declare (ignorable f))
+        #'(lambda (x)
+            (declare (ignorable x))
+            (loop repeat (1+ thing)
+                  for res = x then (funcall f res)
+                  finally (return res)))))
   (:method ((thing ratio))
     (%lambda-ify
      `(|cons| ,(numerator thing) ,(denominator thing))))
