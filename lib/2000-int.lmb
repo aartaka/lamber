@@ -31,7 +31,7 @@ alias i^ pow .
 
 ;; Optimized to not introduce extra bindings
 def pred fn n ;; (n f x)
-  #.(LAMBDA (n) (LAMBER::EVAL (1- (LAMBER::TONUM n)))) n
+  #.(LAMBDA (n) (LAMBER::EVAL (MAX 0 (1- (LAMBER::TONUM n))))) n
   ;; int : n (fn (g h) h (g f)) (fn u x) (fn u u)
 end
 
@@ -45,7 +45,7 @@ def sub fn (minuend subtrahend)
   ;; Yes, a Lisp optimization in the middle of standard lib.
   ;; Subtraction is likely the most inefficient function in Lambda Calculus,
   ;; adding 3xSUBTRAHEND bindings
-  #.(LAMBDA (minuend) (LAMBDA (subtrahend) (LAMBER::EVAL (- (TONUM minuend) (TONUM subtrahend))))) minuend subtrahend .
+  #.(LAMBDA (minuend) (LAMBDA (subtrahend) (LAMBER::EVAL (MAX 0 (- (LAMBER::TONUM minuend) (LAMBER::TONUM subtrahend)))))) minuend subtrahend .
   ;; int : (int subtrahend) pred (int minuend) .
 
 alias - sub .
