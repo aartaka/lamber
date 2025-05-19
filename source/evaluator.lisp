@@ -74,9 +74,6 @@
                      (if args
                          `(lambda (,@args) ,body)
                          body)))))
-      (|cons| `(lambda (z)
-                 (z ,(%lambda-ify (second thing))
-                    ,(%lambda-ify (third thing)))))
       (t (mapcar #'%lambda-ify thing)))))
 
 (defun %process-applications (term)
