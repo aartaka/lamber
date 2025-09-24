@@ -10,8 +10,6 @@ def maybe type (x)
 alias box maybe .
 alias option maybe .
 
-alias option maybe .
-
 def isnothing fn (mb)
   mb (fn _ false) true .
 
