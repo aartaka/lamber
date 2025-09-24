@@ -2,6 +2,7 @@ alias some? identity .
 
 alias ⊤ true .
 alias constantly true .
+alias constant true .
 
 alias ⊥ false .
 

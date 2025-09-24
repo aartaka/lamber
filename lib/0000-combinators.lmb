@@ -26,6 +26,10 @@ def C fn (a b c)
 
 alias swap C .
 
+def flip fn f
+  fn (x y)
+    x y : f y x .
+
 def D fn (a b c d)
   a b : c d .
 
@@ -57,6 +61,7 @@ def W fn (a b)
   a b b .
 
 alias dup W .
+alias duplicate W .
 
 def ω fn a
   a a .
@@ -79,3 +84,15 @@ def Z2 fn f
 
 def ι fn f
   f S K .
+
+def agenda fn (p f g)
+  fn x
+    if : p x
+     then f x
+     else g x .
+
+;; def pipe (x) x .
+
+;; def under fn (f g)
+;;   fn (x y)
+;;     f (g x) (g y) .
