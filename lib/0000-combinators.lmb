@@ -107,4 +107,6 @@ alias threading piping .
 alias thread pipe .
 alias threaded piped .
 
+;; Yes, it’s ugly and unlikely to be used by anyone.
+;; Still, a fun experiment.
 ;; writes : itos : --> 3 : -> (* 2) : -> 1+ >-- .
