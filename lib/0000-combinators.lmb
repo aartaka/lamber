@@ -91,8 +91,20 @@ def agenda fn (p f g)
      then f x
      else g x .
 
-;; def pipe (x) x .
+def piping fn (x f)
+  f x .
 
-;; def under fn (f g)
-;;   fn (x y)
-;;     f (g x) (g y) .
+def pipe fn (f g x)
+  g : f x .
+
+alias piped identity .
+
+alias --> piping .
+alias -> pipe .
+alias >-- piped .
+
+alias threading piping .
+alias thread pipe .
+alias threaded piped .
+
+;; writes : itos : --> 3 : -> (* 2) : -> 1+ >-- .
