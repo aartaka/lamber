@@ -1,5 +1,5 @@
 def writec fn (c)
-  #.(LAMBDA (x) (LAMBER::EVAL (PROGN (PRINC (LAMBER::TOCHAR x)) x))) : char c .
+  #.(CL:LAMBDA (x) (LAMBER::EVAL (CL:PROGN (CL:PRINC (LAMBER::TOCHAR x)) x))) : char c .
 
 alias putChar writec .
 
@@ -15,17 +15,17 @@ def writesln fn (string)
 alias putStrLn writesln .
 
 def writef fn (name string)
-  #.(LAMBDA (NAME)
-     (LAMBDA (STR)
+  #.(CL:LAMBDA (NAME)
+     (CL:LAMBDA (STR)
       (LAMBER::EVAL
        (UIOP:WITH-OUTPUT-FILE (F (LAMBER::TOSTRING NAME)
-                              #.(INTERN "IF-EXISTS" "KEYWORD") (INTERN "SUPERSEDE" "KEYWORD"))
-        (WRITE-STRING (LAMBER::TOSTRING STR) F))))) (str name) (str string) .
+                              #.(CL:INTERN "IF-EXISTS" "KEYWORD") (CL:INTERN "SUPERSEDE" "KEYWORD"))
+        (CL:WRITE-STRING (LAMBER::TOSTRING STR) F))))) (str name) (str string) .
 
 def writeFile writef .
 
 def readc fn (dummy)
-  #.(LAMBDA (_) (DECLARE (IGNORE _)) (LAMBER::EVAL (READ-CHAR))) dummy
+  #.(CL:LAMBDA (_) (CL:DECLARE (CL:IGNORE _)) (LAMBER::EVAL (CL:READ-CHAR))) dummy
 
 alias getChar readc .
 
@@ -38,6 +38,6 @@ def readln fn (dummy)
 alias getLine readln .
 
 def readf fn (name)
-  #.(LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) (str name) .
+  #.(CL:LAMBDA (x) (LAMBER::EVAL (UIOP:READ-FILE-STRING (LAMBER::TOSTRING x)))) (str name) .
 
 alias readFile readf .

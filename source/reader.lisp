@@ -48,7 +48,7 @@
                (values
                 `(if ,condition
                      ,then
-                     |nil|)
+                     lamber-names::|nil|)
                 rest)))))
       ((memqual-string (first list) '("fn" "lambda" "function"))
        (let ((args (second list)))
@@ -121,8 +121,8 @@
                (when cons
                  (if (eq '|\|| (car cons))
                      (second cons)
-                     `(|cons| ,(car cons)
-                              ,(or (format-cons (cdr cons)) '|nil|))))))
+                     `(lamber-names::|cons| ,(car cons)
+                              ,(or (format-cons (cdr cons)) 'lamber-names::|nil|))))))
       (format-cons list))))
 
 (defun read-colon (stream char)
@@ -146,7 +146,7 @@
 
 (defun read (in)
   (let ((*readtable* (copy-readtable *readtable*))
-        (*package* (find-package :lamber)))
+        (*package* (find-package :lamber-names)))
     (setf (readtable-case *readtable*) :preserve)
     (set-macro-character #\' #'read-quoted-char t)
     (set-macro-character #\" #'read-string)

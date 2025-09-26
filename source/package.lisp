@@ -6,3 +6,5 @@
   (:shadow #:read
            #:optimize
            #:eval))
+
+(defpackage :lamber-names)
