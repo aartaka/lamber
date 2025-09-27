@@ -91,20 +91,30 @@ def agenda fn (p f g)
      then f x
      else g x .
 
-def piping fn (x f)
-  f x .
+def piping fn (init cont)
+  cont init .
 
-def pipe fn (f g x)
-  g : f x .
+def pipe fn (f cont val)
+  cont : f val .
+
+def pipe2 fn (f arg cont val)
+  cont : f arg val .
+
+def pipe3 fn (f arg1 arg2 cont val)
+  cont : f arg1 arg2 val .
 
 alias piped identity .
 
 alias --> piping .
 alias -> pipe .
+alias -2> pipe2 .
+alias -3> pipe3 .
 alias >-- piped .
 
 alias threading piping .
 alias thread pipe .
+alias thread2 pipe2 .
+alias thread3 pipe3 .
 alias threaded piped .
 
 ;; Yes, it’s ugly and unlikely to be used by anyone.
