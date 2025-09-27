@@ -188,5 +188,5 @@
                 (warn-on-suspicious-applications
                  (warn-on-unbound expr))))))))
       (if (dry-run-p optimized)
-          '|nil|
+          'lamber-names::|nil|
           (values optimized return-type)))))

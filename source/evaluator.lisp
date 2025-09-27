@@ -11,11 +11,11 @@
   (:method ((thing (eql 'type)))
     `(lambda (x) x))
   (:method ((thing (eql t)))
-    '|true|)
+    'lamber-names::|true|)
   (:method ((thing (eql nil)))
-    '|nil|)
+    'lamber-names::|nil|)
   (:method ((thing string))
-    (loop with acc = '|nil|
+    (loop with acc = 'lamber-names::|nil|
           for char across (reverse thing)
           do (setf acc `(lambda (z) (z ,(%lambda-ify char) ,acc)))
           finally (return acc)))
@@ -29,7 +29,7 @@
                   finally (return res)))))
   (:method ((thing ratio))
     (%lambda-ify
-     `(|cons| ,(numerator thing) ,(denominator thing))))
+     `(lamber-names::|cons| ,(numerator thing) ,(denominator thing))))
   (:method ((thing cons))
     (case (first thing)
       (let (destructuring-bind (let ((name value)) body)
