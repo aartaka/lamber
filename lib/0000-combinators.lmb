@@ -53,7 +53,6 @@ alias bi N .
 def O fn (a b)
   b : a b .
 
-;; Named with quote because T is a special symbol in Lisp.
 def T fn (a b)
   b a .
 
@@ -120,3 +119,7 @@ alias threaded piped .
 ;; Yes, it’s ugly and unlikely to be used by anyone.
 ;; Still, a fun experiment.
 ;; writes : itos : --> 3 : -> (* 2) : -> 1+ >-- .
+
+;; Same as pipe, actually
+def Q fn (f g x)
+  g : f x .
