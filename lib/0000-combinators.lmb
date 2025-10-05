@@ -59,6 +59,9 @@ def T fn (a b)
 def W fn (a b)
   a b b .
 
+def Q fn (f g x)
+  g : f x .
+
 alias dup W .
 alias duplicate W .
 
@@ -93,8 +96,7 @@ def agenda fn (p f g)
 def piping fn (init cont)
   cont init .
 
-def pipe fn (f cont val)
-  cont : f val .
+alias pipe Q .
 
 def pipe2 fn (f arg cont val)
   cont : f arg val .
@@ -119,7 +121,3 @@ alias threaded piped .
 ;; Yes, it’s ugly and unlikely to be used by anyone.
 ;; Still, a fun experiment.
 ;; writes : itos : --> 3 : -> (* 2) : -> 1+ >-- .
-
-;; Same as pipe, actually
-def Q fn (f g x)
-  g : f x .
