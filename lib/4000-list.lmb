@@ -13,7 +13,11 @@ def map fn (f list)
 end
 
 def concat fn (a b)
-  foldr cons b a .
+  local %concat = fn (h t i)
+    cons h (t %concat i)
+  end
+  a %concat b
+end
 
 def rcons fn (last list)
   concat list : cons last nil .
