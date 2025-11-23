@@ -114,6 +114,16 @@ def div fn (dividend divisor)
   int (fn (f x)
        (int dividend) T (K x) ((int dividend) (F (int divisor) f) x)) .
 
+;; Original unoptimized implementation
+;; def div fn (dividend divisor)
+;;   local %div = fn quot
+;;     when lt quot divisor
+;;     then 0
+;;     else : succ : %div : sub quot divisor
+;;   end
+;;   %div dividend
+;; end
+
 alias / div .
 alias quot div .
 alias i/ div .
