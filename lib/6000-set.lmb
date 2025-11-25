@@ -10,7 +10,6 @@ def deduplicate fn (eq list)
 end
 
 alias nub deduplicate .
-alias set deduplicate .
 alias dedup deduplicate .
 alias dedupe deduplicate .
 
