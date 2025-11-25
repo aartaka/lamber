@@ -5,6 +5,13 @@ def foldr fn (f init list)
   list %foldr init
 end
 
+def foldrtail fn (f init list)
+  local %foldrtail = fn (h t z)
+    f h t : t %foldrtail z
+  end
+  list %foldrtail init
+end
+
 def map fn (f list)
   local %map = fn (h t i)
     cons (f h) (t %map i)
